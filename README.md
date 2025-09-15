@@ -1,4 +1,4 @@
-# Sharepoint Dynamic Form Builder
+# SharePoint - Dynamic Form Builder (WebPart)
 ## Summary
 This WebPart (App) builds and creates an input form from a given SharePoint List and defined view. The view is used to determine the fields and the order of the fields in the form.
 This allows the form to be flexibly integrated into all SharePoint pages. The web part uses the latest version of the [Fluent UI React Components library](https://react.fluentui.dev/?path=/docs/concepts-introduction--page).
