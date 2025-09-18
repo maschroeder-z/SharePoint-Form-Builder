@@ -263,6 +263,7 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
         <Dropdown disabled={this.props.ReadOnlyField || this.props.IsDisabled}
           name={this.props.InternalName}
           id={this.props.InternalName}
+          inlinePopup={true}
           multiselect={false}
           onOptionSelect={this._onDropdDownSelectionChanged}>
           {this.state.lookupChoices && this.state.lookupChoices.map(option => (

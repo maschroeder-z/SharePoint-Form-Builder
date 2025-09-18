@@ -42,6 +42,8 @@ export interface ISPListField {
     TypeShortDescription: string;
     DefaultValue: string;
     IsDisabled: boolean;
+    CurrencyLocaleId: number;
+    CommaSeparator: boolean;
     Choices: string[];
     TypeAsString: string;
     FormValue: string | string[] | boolean | ChoiceValue | LinkFieldValue | Date;
