@@ -27,7 +27,7 @@ import { LinkFieldValue } from './LinkFieldValue';
  * 33 "<Field DisplayName="Details" Format="Dropdown" IsModern="TRUE" Name="Details" Title="Details" Type="Location" ID="{d256e1c8-02b5-4ee1-b2b7-664c634f700f}" SourceID="{9516d5e4-aa12-4931-a5a5-9b5e6c15db91}" StaticName="Details" ColName="ntext2" RowOrdinal="0" />"
  * 34 "<Field Type="Thumbnail" DisplayName="OnlyImage" Required="FALSE" EnforceUniqueValues="FALSE" Indexed="FALSE" ID="{423329b0-41e7-4452-bca6-2ccac301f6df}" SourceID="{9516d5e4-aa12-4931-a5a5-9b5e6c15db91}" StaticName="OnlyImage" Name="OnlyImage" ColName="ntext5" RowOrdinal="0" />"
 */
-declare type FormFieldState = {
+type FormFieldState = {
     errorMessage: string;
     currentFormValue: LinkFieldValue | string | string[] | boolean | ChoiceValue | Date;
     lookupChoices?: ChoiceValue[];

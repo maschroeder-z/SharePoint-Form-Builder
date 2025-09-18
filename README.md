@@ -31,10 +31,11 @@ This allows the form to be flexibly integrated into all SharePoint pages. The we
 
 ## Version history
 
-| Version | Date             | Comments              |
-| ------- | ---------------- | --------------------- |
-| 1.1     | 24.07.2024       | Upgrade to SPFx 1.18  |
-| 1.0     | 10.08.2023       | Initial Release       |
+| Version | Date             | Comments                |
+| ------- | ---------------- | ----------------------- |
+| 1.2     | 18.09.2025       | Upgrade to SPFx 1.21.1  |
+| 1.1     | 24.07.2024       | Upgrade to SPFx 1.18    |
+| 1.0     | 10.08.2023       | Initial Release         |
 
 ## Disclaimer
 

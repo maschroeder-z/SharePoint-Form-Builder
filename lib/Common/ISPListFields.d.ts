@@ -4,8 +4,8 @@ import { LinkFieldValue } from './LinkFieldValue';
 export interface ISPListFields {
     value: ISPListField[];
 }
-export declare type ChangedFormEvent = (sourceField: ISPListField, newValue: string | string[] | LinkFieldValue | boolean | ChoiceValue | Date, validationError: string) => void;
-export declare type LookupInfo = {
+export type ChangedFormEvent = (sourceField: ISPListField, newValue: string | string[] | LinkFieldValue | boolean | ChoiceValue | Date, validationError: string) => void;
+export type LookupInfo = {
     DisplayName: string;
     List: string;
     WebId: string;
@@ -17,7 +17,7 @@ export declare type LookupInfo = {
     Name: string;
     LookupChoices?: ChoiceValue[];
 };
-export declare type ChoiceValue = {
+export type ChoiceValue = {
     Value: string;
     Title: string;
     Details: string;

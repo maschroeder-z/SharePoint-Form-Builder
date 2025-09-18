@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IDynamicFormularGeneratorProps } from './IDynamicFormularGeneratorProps';
 import { ISPListItem } from '../../../Common/ISPListItem';
-declare type FormState = {
+type FormState = {
     errorMessage: string[];
     isFormValid: boolean;
     isProcessing: boolean;

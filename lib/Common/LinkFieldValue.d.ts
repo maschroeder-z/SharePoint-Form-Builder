@@ -1,4 +1,4 @@
-export declare type LinkFieldValue = {
+export type LinkFieldValue = {
     Url: string;
     Description: string;
 };

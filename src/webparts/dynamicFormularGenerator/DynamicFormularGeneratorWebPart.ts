@@ -34,14 +34,14 @@ export interface IDynamicFormularGeneratorWebPartProps {
   currentSite: boolean;
   siteUrl: string;
   sourceListName: string;
-  viewID: string;  
+  viewID: string;
   viewXML: string;
   emailToUser: boolean;
   attachmentFields: number;
-  allowedUploadFileTypes: string; 
-  addionalFieldRules: {[key: string]: IRuleEntry};
-  emailSubject:string;
-  emailHeader:string;    
+  allowedUploadFileTypes: string;
+  addionalFieldRules: { [key: string]: IRuleEntry };
+  emailSubject: string;
+  emailHeader: string;
   addDataLinkInEMail: boolean;
   enablePrint: boolean;
 }
@@ -50,50 +50,49 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
   private _isDarkTheme: boolean = false;
   private _appMode: AppMode = AppMode.SharePoint;
   private _theme: Theme = webLightTheme;
-  
+
   private availableLists: IPropertyPaneDropdownOption[] = [];
-  private viewsInList: IPropertyPaneDropdownOption[] = []; 
+  private viewsInList: IPropertyPaneDropdownOption[] = [];
   private viewData: ISPView[] = null;
   private fieldsInView: IPropertyPaneDropdownOption[] = null;
-  private loadingLists: boolean = false;    
+  private loadingLists: boolean = false;
 
   public render(): void {
     const element: React.ReactElement<IDynamicFormularGeneratorProps> = React.createElement(
       DynamicFormularGenerator,
       {
         description: this.properties.description,
-        isDarkTheme: this._isDarkTheme,        
+        isDarkTheme: this._isDarkTheme,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
         viewID: this.properties.viewID,
         listID: this.properties.sourceListName,
         httpClient: this.context.spHttpClient,
-        viewXml: (this.properties.viewXML!==null?this.properties.viewXML:""),
+        viewXml: (this.properties.viewXML !== null ? this.properties.viewXML : ""),
         siteURL: this.GetSelectedUrl(),
         successMessage: this.properties.successMessage,
         uploads: this.properties.attachmentFields,
         allowedUploadFileTypes: this.properties.allowedUploadFileTypes,
         addionalFieldRules: this.properties.addionalFieldRules,
         emailSubject: this.properties.emailSubject,
-        emailLeadText:this.properties.emailHeader,
-        currentUserEMail:this.context.pageContext.user.email,
+        emailLeadText: this.properties.emailHeader,
+        currentUserEMail: this.context.pageContext.user.email,
         sendConfirmationEMail: this.properties.emailToUser,
-        addDataLinkInEMail:this.properties.addDataLinkInEMail,
-        enablePrint:this.properties.enablePrint,
-        wpContext: this.context,        
+        addDataLinkInEMail: this.properties.addDataLinkInEMail,
+        enablePrint: this.properties.enablePrint,
+        wpContext: this.context,
       }
-    );           
-    
+    );
+
     //wrap the component with the Fluent UI 9 Provider.
     const fluentElement: React.ReactElement<FluentProviderProps> = React.createElement(
       FluentProvider,
       {
         theme: this._appMode === AppMode.Teams || this._appMode === AppMode.TeamsLocal ?
-            this._isDarkTheme ? teamsDarkTheme : teamsLightTheme 
-          :
-            this._appMode === AppMode.SharePoint || this._appMode === AppMode.SharePointLocal ?
-          this._isDarkTheme ? webDarkTheme : this._theme :
-          this._isDarkTheme ? webDarkTheme : webLightTheme
+          this._isDarkTheme ? teamsDarkTheme : teamsLightTheme :
+          this._appMode === AppMode.SharePoint || this._appMode === AppMode.SharePointLocal ?
+            this._isDarkTheme ? webDarkTheme : this._theme :
+            this._isDarkTheme ? webDarkTheme : webLightTheme
       },
       element
     );
@@ -159,13 +158,12 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
     return Version.parse('1.0');
   }
 
-  private GetSelectedUrl():string{
+  private GetSelectedUrl(): string {
     return this.properties.siteUrl ? this.properties.siteUrl : this.context.pageContext.web.absoluteUrl;
   }
 
   private loadWPConfigInformation(): void {
-    if (!this.loadingLists && this.availableLists.length===0)
-    {      
+    if (!this.loadingLists && this.availableLists.length === 0) {
       this.loadAvailableLists();
     }
     return;
@@ -177,100 +175,96 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
       endpoint,
       SPHttpClient.configurations.v1
     )
-    .then(response => {
-      return response.json();
-    }); 
-  }  
+      .then(response => {
+        return response.json();
+      });
+  }
   private qryViews4List(listID: Guid): Promise<ISPViews> {
-    const endpoint = `${this.GetSelectedUrl()}/_api/web/lists/getbyid('${listID}')/views`; 
+    const endpoint = `${this.GetSelectedUrl()}/_api/web/lists/getbyid('${listID}')/views`;
     return this.context.spHttpClient.get(
       endpoint,
       SPHttpClient.configurations.v1
     )
-    .then(response => {
-      return response.json();
-    }); 
+      .then(response => {
+        return response.json();
+      });
   }
 
-  private async loadAvailableLists() : Promise<void> {       
+  private async loadAvailableLists(): Promise<void> {
     this.loadingLists = true;
-    let options: IPropertyPaneDropdownOption[] = [];   
-    try {        
-      const lists : ISPLists = await this.qryListInformation();
-      if (lists.value.length>0) 
-      {
-        lists.value.forEach(libs => {          
-          options.push({ key: libs.Id, text: `${libs.Title} (${libs.ItemCount})`});
+    let options: IPropertyPaneDropdownOption[] = [];
+    try {
+      const lists: ISPLists = await this.qryListInformation();
+      if (lists.value.length > 0) {
+        lists.value.forEach(libs => {
+          options.push({ key: libs.Id, text: `${libs.Title} (${libs.ItemCount})` });
         });
-        if (typeof(this.properties.sourceListName) !== "undefined" && this.properties.sourceListName.trim().length>0)           
-        {
-          const viewData : ISPViews = await this.qryViews4List(Guid.parse(this.properties.sourceListName));
-          this.viewsInList= [];   
-          this.viewData=viewData.value;           
-          viewData.value.forEach(item => {   
-            if (!item.Hidden)
-              {              
+        if (typeof (this.properties.sourceListName) !== "undefined" && this.properties.sourceListName.trim().length > 0) {
+          const viewData: ISPViews = await this.qryViews4List(Guid.parse(this.properties.sourceListName));
+          this.viewsInList = [];
+          this.viewData = viewData.value;
+          viewData.value.forEach(item => {
+            if (!item.Hidden) {
               this.viewsInList.push({
                 key: item.Id,
-                text: item.Title            
-              });            
+                text: item.Title
+              });
             }
-          });          
+          });
           this.render();
-          this.context.propertyPane.refresh();   
-          this.onPropertyPaneFieldChanged("viewID", null, this.properties.viewID);                 
+          this.context.propertyPane.refresh();
+          this.onPropertyPaneFieldChanged("viewID", null, this.properties.viewID);
         }
       }
       else {
-        this.loadingLists = false;        
+        this.loadingLists = false;
         options = [];
       }
     }
-    catch (error) {                
+    catch (error) {
       this.loadingLists = false;
       options = [];
     }
-    this.loadingLists=false;
+    this.loadingLists = false;
     this.availableLists = options;
-    this.context.propertyPane.refresh();    
+    this.context.propertyPane.refresh();
   }
 
   protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: any, newValue: any): void {
-    if (propertyPath === 'currentSite' && newValue) {       
-      super.onPropertyPaneFieldChanged("siteUrl", oldValue, "");            
-    }    
-    if (propertyPath === 'sourceListName' && newValue) {                   
-      super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);                 
-      delete this.properties.viewXML;      
-      this.viewsInList=[];            
-      this.context.statusRenderer.displayLoadingIndicator(this.domElement, 'viewsInList');     
+    if (propertyPath === 'currentSite' && newValue) {
+      super.onPropertyPaneFieldChanged("siteUrl", oldValue, "");
+    }
+    if (propertyPath === 'sourceListName' && newValue) {
+      super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);
+      delete this.properties.viewXML;
+      this.viewsInList = [];
+      this.context.statusRenderer.displayLoadingIndicator(this.domElement, 'viewsInList');
       this.qryViews4List(newValue).then((viewList: ISPViews): void => {
-        const newListViews : IPropertyPaneDropdownOption[] = [];
-        this.viewData=viewList.value;
-        viewList.value.forEach(item => {   
-          if (!item.Hidden) {            
+        const newListViews: IPropertyPaneDropdownOption[] = [];
+        this.viewData = viewList.value;
+        viewList.value.forEach(item => {
+          if (!item.Hidden) {
             newListViews.push({
               key: item.Id,
               text: item.Title
-            });                
-          }    
+            });
+          }
         });
-        this.viewsInList=newListViews;                        
+        this.viewsInList = newListViews;
         this.context.statusRenderer.clearLoadingIndicator(this.domElement);
         this.context.propertyPane.refresh();
-      });  
+      });
     }
-    if (propertyPath === 'viewID' && newValue && Guid.tryParse(newValue) && this.viewData) { 
-      const temp = this.viewData.filter(x=>x.Id === newValue)[0];
-      if (typeof temp !== "undefined" && typeof temp.ListViewXml !== "undefined")
-      {
+    if (propertyPath === 'viewID' && newValue && Guid.tryParse(newValue) && this.viewData) {
+      const temp = this.viewData.filter(x => x.Id === newValue)[0];
+      if (typeof temp !== "undefined" && typeof temp.ListViewXml !== "undefined") {
         this.properties.viewXML = temp.ListViewXml;
         this.fieldsInView = [];
-        Helper.GetViewFields(this.properties.viewXML).forEach(fieldName => {          
-          this.fieldsInView.push({ key: fieldName, text: fieldName});
-        });        
+        Helper.GetViewFields(this.properties.viewXML).forEach(fieldName => {
+          this.fieldsInView.push({ key: fieldName, text: fieldName });
+        });
       }
-    }    
+    }
   }
 
   protected get getSourceConfiguration(): IPropertyPaneGroup {
@@ -278,48 +272,48 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
     const grp: IPropertyPaneGroup = {
       groupName: strings.GroupListViewData,
       groupFields: [
-        PropertyPaneToggle('currentSite', { 
-          label: strings.DataListSourceLabel, 
-          onText: strings.DataListSourceCurrentLabel, 
-          offText: strings.DataListSourceExternLabel, 
-          offAriaLabel: strings.DataListSourceExternLabel, 
-          onAriaLabel: strings.DataListSourceCurrentLabel, 
-          checked: true          
+        PropertyPaneToggle('currentSite', {
+          label: strings.DataListSourceLabel,
+          onText: strings.DataListSourceCurrentLabel,
+          offText: strings.DataListSourceExternLabel,
+          offAriaLabel: strings.DataListSourceExternLabel,
+          onAriaLabel: strings.DataListSourceCurrentLabel,
+          checked: true
         }),
-        PropertyPaneTextField('siteUrl', { 
-          underlined: true, 
-          placeholder: `${this.properties.currentSite ? this.context.pageContext.web.absoluteUrl : strings.URLOfExternalSitePlaceholderLabel}`, 
+        PropertyPaneTextField('siteUrl', {
+          underlined: true,
+          placeholder: `${this.properties.currentSite ? this.context.pageContext.web.absoluteUrl : strings.URLOfExternalSitePlaceholderLabel}`,
           disabled: this.properties.currentSite,
-          onGetErrorMessage: (value:string): string => {
+          onGetErrorMessage: (value: string): string => {
             if (!this.properties.currentSite && (value === null || value.trim().length === 0)) {
               return strings.ErrorMissingSiteText;
             }
             return "";
           }
         }),
-        PropertyPaneDropdown('sourceListName', { 
-          options: this.availableLists, 
-          label: strings.ChooseList,                   
-          disabled: this.availableLists.length === 0, 
-          selectedKey: this.properties.sourceListName 
+        PropertyPaneDropdown('sourceListName', {
+          options: this.availableLists,
+          label: strings.ChooseList,
+          disabled: this.availableLists.length === 0,
+          selectedKey: this.properties.sourceListName
         }),
-        PropertyPaneDropdown('viewID', { 
-          options: this.viewsInList, 
-          label: strings.ChooseView,                   
-          disabled: this.viewsInList.length === 0, 
-          selectedKey: this.properties.viewID,          
+        PropertyPaneDropdown('viewID', {
+          options: this.viewsInList,
+          label: strings.ChooseView,
+          disabled: this.viewsInList.length === 0,
+          selectedKey: this.properties.viewID,
         }),
-        new PropertyPaneFieldRuleEditor('fieldRulesSettings',{
+        new PropertyPaneFieldRuleEditor('fieldRulesSettings', {
           label: strings.FieldRulesLabel,
           disabled: false,
-          stateKey:  new Date().toString(),
+          stateKey: new Date().toString(),
           fieldNames: this.fieldsInView,
           addionalFieldRules: this.properties.addionalFieldRules,
           onPropertyChange: (fieldRules) => {
             console.log(fieldRules); // TO JSON AND save
-            this.properties.addionalFieldRules=fieldRules;
+            this.properties.addionalFieldRules = fieldRules;
           },
-        })    
+        })
       ]
     };
     return grp;
@@ -329,7 +323,7 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
     this.loadWPConfigInformation();
   }
 
-  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {    
+  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
         {
@@ -346,53 +340,53 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
                   label: strings.DescriptionFieldLabel,
                   multiline: true,
                   resizable: true
-                }),                
+                }),
                 PropertyPaneTextField('successMessage', {
                   label: strings.SuccessMessageLabel,
                   multiline: true,
                   resizable: true
-                }),                
-                PropertyPaneCheckbox('enablePrint', {
-                  text: strings.EnablePrintLabel                                        
                 }),
-                PropertyPaneToggle('emailToUser', { 
-                  label: strings.SendEMailWithFormDataLabel, 
-                  onText: strings.SendEMailWithFormDataYesLabel, 
-                  offText: strings.SendEMailWithFormDataNoLabel, 
-                  checked: false          
-                }),                 
+                PropertyPaneCheckbox('enablePrint', {
+                  text: strings.EnablePrintLabel
+                }),
+                PropertyPaneToggle('emailToUser', {
+                  label: strings.SendEMailWithFormDataLabel,
+                  onText: strings.SendEMailWithFormDataYesLabel,
+                  offText: strings.SendEMailWithFormDataNoLabel,
+                  checked: false
+                }),
                 PropertyPaneTextField('emailSubject', {
                   label: strings.EmailSubjectLable,
                   disabled: !this.properties.emailToUser,
-                  multiline: false                  
+                  multiline: false
                 }),
                 PropertyPaneTextField('emailHeader', {
                   label: strings.EmailHeaderLabel,
                   disabled: !this.properties.emailToUser,
                   multiline: true,
                   resizable: true
-                }),                           
+                }),
                 PropertyPaneCheckbox('addDataLinkInEMail', {
                   text: strings.AddDataLinkToEMailLabel,
-                  disabled: !this.properties.emailToUser                  
+                  disabled: !this.properties.emailToUser
                 }),
                 PropertyPaneTextField('allowedUploadFileTypes', {
                   label: strings.AllowedUploadFileTypesLabel,
-                  multiline: false                  
-                }),                
-                PropertyPaneSlider('attachmentFields',{  
-                  label:strings.NoOfFileUploads,  
-                  min:0,  
-                  max:3,  
-                  value:0,  
-                  showValue:true,  
-                  step:1       
-                })                           
+                  multiline: false
+                }),
+                PropertyPaneSlider('attachmentFields', {
+                  label: strings.NoOfFileUploads,
+                  min: 0,
+                  max: 3,
+                  value: 0,
+                  showValue: true,
+                  step: 1
+                })
               ]
             }
           ]
         },
-        
+
       ]
     };
   }

@@ -1,4 +1,4 @@
-/* tslint:disable */
+
 require("./FormControlFluentUI.module.css");
 const styles = {
   formFieldContainer: 'formFieldContainer_86d7cbae',
@@ -8,4 +8,3 @@ const styles = {
 };
 
 export default styles;
-/* tslint:enable */

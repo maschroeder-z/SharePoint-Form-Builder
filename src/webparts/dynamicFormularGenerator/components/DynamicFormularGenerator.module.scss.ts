@@ -1,4 +1,4 @@
-/* tslint:disable */
+
 require("./DynamicFormularGenerator.module.css");
 const styles = {
   dynamicFormularGenerator: 'dynamicFormularGenerator_ec78b856',
@@ -12,4 +12,3 @@ const styles = {
 };
 
 export default styles;
-/* tslint:enable */
