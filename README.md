@@ -10,7 +10,7 @@ This allows the form to be flexibly integrated into all SharePoint pages. The we
 [![SharePoint Online: Dynamisches Formular aus Listenansicht](https://img.youtube.com/vi/p3RwLIM0Efc/hqdefault.jpg)](https://youtu.be/p3RwLIM0Efc)
 
 ## Used SharePoint Framework Version
-![version](https://img.shields.io/badge/version-1.18-green.svg)
+![version](https://img.shields.io/badge/version-1.21.1-green.svg)
 
 ## Applies to
 
