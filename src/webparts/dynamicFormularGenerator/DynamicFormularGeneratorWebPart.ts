@@ -10,8 +10,9 @@ import {
   PropertyPaneDropdown,
   PropertyPaneSlider,
   PropertyPaneTextField,
-  PropertyPaneToggle
+  PropertyPaneToggle,
 } from '@microsoft/sp-property-pane';
+import { IPropertyFieldSite, PropertyFieldSitePicker } from "@pnp/spfx-property-controls/lib/PropertyFieldSitePicker";
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'DynamicFormularGeneratorWebPartStrings';
@@ -31,8 +32,9 @@ export enum AppMode {
 export interface IDynamicFormularGeneratorWebPartProps {
   description: string;
   successMessage: string;
-  currentSite: boolean;
+  //currentSite: boolean;
   siteUrl: string;
+  crossSite: IPropertyFieldSite[],
   sourceListName: string;
   viewID: string;
   viewXML: string;
@@ -159,7 +161,10 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
   }
 
   private GetSelectedUrl(): string {
-    return this.properties.siteUrl ? this.properties.siteUrl : this.context.pageContext.web.absoluteUrl;
+    if (this.properties.crossSite && this.properties.crossSite.length > 0) {
+      return this.properties.crossSite[0].url;
+    }
+    return this.context.pageContext.web.absoluteUrl;
   }
 
   private loadWPConfigInformation(): void {
@@ -191,6 +196,7 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
   }
 
   private async loadAvailableLists(): Promise<void> {
+    console.log("URL", this.GetSelectedUrl());
     this.loadingLists = true;
     let options: IPropertyPaneDropdownOption[] = [];
     try {
@@ -231,9 +237,20 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
   }
 
   protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: any, newValue: any): void {
-    if (propertyPath === 'currentSite' && newValue) {
-      super.onPropertyPaneFieldChanged("siteUrl", oldValue, "");
+    if (propertyPath === 'crossSite' && newValue) {
+      this.properties.sourceListName = undefined;
+      this.loadAvailableLists();
     }
+    /*if (propertyPath === 'currentSite') {
+      console.log("changed prop", oldValue, newValue);
+      this.availableLists = [];
+      this.properties.sourceListName = "";
+      this.properties.crossSite = [];
+      if (newValue) {
+        this.loadAvailableLists();
+      }
+      this.context.propertyPane.refresh();
+    }*/
     if (propertyPath === 'sourceListName' && newValue) {
       super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);
       delete this.properties.viewXML;
@@ -268,28 +285,29 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
   }
 
   protected get getSourceConfiguration(): IPropertyPaneGroup {
-
     const grp: IPropertyPaneGroup = {
       groupName: strings.GroupListViewData,
       groupFields: [
-        PropertyPaneToggle('currentSite', {
+        /*PropertyPaneToggle('currentSite', {
           label: strings.DataListSourceLabel,
           onText: strings.DataListSourceCurrentLabel,
           offText: strings.DataListSourceExternLabel,
           offAriaLabel: strings.DataListSourceExternLabel,
           onAriaLabel: strings.DataListSourceCurrentLabel,
           checked: true
-        }),
-        PropertyPaneTextField('siteUrl', {
-          underlined: true,
-          placeholder: `${this.properties.currentSite ? this.context.pageContext.web.absoluteUrl : strings.URLOfExternalSitePlaceholderLabel}`,
-          disabled: this.properties.currentSite,
-          onGetErrorMessage: (value: string): string => {
-            if (!this.properties.currentSite && (value === null || value.trim().length === 0)) {
-              return strings.ErrorMissingSiteText;
-            }
-            return "";
-          }
+        }),*/
+        PropertyFieldSitePicker('crossSite', {
+          label: 'Select source site',
+          initialSites: this.properties.crossSite,
+          context: this.context,
+          deferredValidationTime: 500,
+          multiSelect: false,
+          //disabled: this.properties.currentSite,
+          onPropertyChange: (siteInfo) => {
+            this.onPropertyPaneFieldChanged('crossSite', null, siteInfo);
+          },
+          properties: this.properties,
+          key: 'pckCrossSite'
         }),
         PropertyPaneDropdown('sourceListName', {
           options: this.availableLists,

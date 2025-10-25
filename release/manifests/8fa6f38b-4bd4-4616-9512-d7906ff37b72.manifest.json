@@ -66,6 +66,48 @@
         "id": "f9e737b7-f0df-4597-ba8c-3060f82380db",
         "version": "1.21.1"
       },
+      "PropertyControlStrings": {
+        "type": "localizedPath",
+        "paths": {
+          "ar-SA": "PropertyControlStrings_ar-sa.js",
+          "bg-BG": "PropertyControlStrings_bg-bg.js",
+          "ca-ES": "PropertyControlStrings_ca-es.js",
+          "cs-CZ": "PropertyControlStrings_cs-cz.js",
+          "da-DK": "PropertyControlStrings_da-dk.js",
+          "de-DE": "PropertyControlStrings_de-de.js",
+          "el-GR": "PropertyControlStrings_el-gr.js",
+          "en-GB": "PropertyControlStrings_en-gb.js",
+          "en-US": "PropertyControlStrings_en-us.js",
+          "es-ES": "PropertyControlStrings_es-es.js",
+          "et-EE": "PropertyControlStrings_et-ee.js",
+          "fi-FI": "PropertyControlStrings_fi-fi.js",
+          "fr-FR": "PropertyControlStrings_fr-fr.js",
+          "it-IT": "PropertyControlStrings_it-it.js",
+          "ja-JP": "PropertyControlStrings_ja-jp.js",
+          "lt-LT": "PropertyControlStrings_lt-lt.js",
+          "lv-LV": "PropertyControlStrings_lv-lv.js",
+          "nb-NO": "PropertyControlStrings_nb-no.js",
+          "nl-NL": "PropertyControlStrings_nl-nl.js",
+          "no": "PropertyControlStrings_no.js",
+          "pl-PL": "PropertyControlStrings_pl-pl.js",
+          "pt-PT": "PropertyControlStrings_pt-pt.js",
+          "ro-RO": "PropertyControlStrings_ro-ro.js",
+          "ru-RU": "PropertyControlStrings_ru-ru.js",
+          "sk-SK": "PropertyControlStrings_sk-sk.js",
+          "sr-Latn-RS": "PropertyControlStrings_sr-latn-rs.js",
+          "sv-SE": "PropertyControlStrings_sv-se.js",
+          "tr-TR": "PropertyControlStrings_tr-tr.js",
+          "vi-VN": "PropertyControlStrings_vi-vn.js",
+          "zh-CN": "PropertyControlStrings_zh-cn.js",
+          "zh-TW": "PropertyControlStrings_zh-tw.js"
+        },
+        "defaultPath": "PropertyControlStrings_en-us.js"
+      },
+      "@microsoft/sp-lodash-subset": {
+        "type": "component",
+        "id": "73e1dc6c-8441-42cc-ad47-4bd3659f8a3a",
+        "version": "1.21.1"
+      },
       "@microsoft/sp-webpart-base": {
         "type": "component",
         "id": "974a7777-0990-4136-8fa6-95d80114c2e0",

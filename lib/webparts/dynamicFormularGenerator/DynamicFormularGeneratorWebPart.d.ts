@@ -1,5 +1,6 @@
 import { Version } from '@microsoft/sp-core-library';
 import { IPropertyPaneConfiguration, IPropertyPaneGroup } from '@microsoft/sp-property-pane';
+import { IPropertyFieldSite } from "@pnp/spfx-property-controls/lib/PropertyFieldSitePicker";
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import { IRuleEntry } from '../../Common/IRuleEntry';
@@ -16,8 +17,8 @@ export declare enum AppMode {
 export interface IDynamicFormularGeneratorWebPartProps {
     description: string;
     successMessage: string;
-    currentSite: boolean;
     siteUrl: string;
+    crossSite: IPropertyFieldSite[];
     sourceListName: string;
     viewID: string;
     viewXML: string;
