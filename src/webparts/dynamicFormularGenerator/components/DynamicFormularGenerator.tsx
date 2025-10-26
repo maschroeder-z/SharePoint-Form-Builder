@@ -166,6 +166,11 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
             fieldInfo.FormValue = false
         }
 
+        if (typeof this.props.RESTLookupDefinition !== "undefined" && this.props.RESTLookupDefinition !== null) {
+          fieldInfo.RESTLookup = this.props.RESTLookupDefinition.filter(x => x.SourceColumnInternalName === fieldInfo.StaticName)[0];
+          console.log("REST", fieldInfo.RESTLookup);
+        }
+
         if (typeof this.props.addionalFieldRules !== "undefined" && this.props.addionalFieldRules !== null) {
           fieldInfo.AddionalRule = this.props.addionalFieldRules[fieldInfo.StaticName];
         }

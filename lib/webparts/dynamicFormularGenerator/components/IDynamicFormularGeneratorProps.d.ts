@@ -1,6 +1,7 @@
 import { SPHttpClient } from '@microsoft/sp-http';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { IRuleEntry } from '../../../Common/IRuleEntry';
+import { IRESTLookupDefinition } from '../../../Common/IRESTLookupDefinition';
 export interface IDynamicFormularGeneratorProps {
     description: string;
     isDarkTheme: boolean;
@@ -24,5 +25,6 @@ export interface IDynamicFormularGeneratorProps {
     addDataLinkInEMail: boolean;
     enablePrint: boolean;
     wpContext: WebPartContext;
+    RESTLookupDefinition: IRESTLookupDefinition[];
 }
 //# sourceMappingURL=IDynamicFormularGeneratorProps.d.ts.map

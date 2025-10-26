@@ -4,6 +4,7 @@ import { IPropertyFieldSite } from "@pnp/spfx-property-controls/lib/PropertyFiel
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import { IRuleEntry } from '../../Common/IRuleEntry';
+import { IRESTLookupDefinition } from '../../Common/IRESTLookupDefinition';
 export declare enum AppMode {
     SharePoint = 0,
     SharePointLocal = 1,
@@ -17,6 +18,7 @@ export declare enum AppMode {
 export interface IDynamicFormularGeneratorWebPartProps {
     description: string;
     successMessage: string;
+    fieldRESTLoookup: IRESTLookupDefinition[];
     siteUrl: string;
     crossSite: IPropertyFieldSite[];
     sourceListName: string;

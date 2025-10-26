@@ -24,6 +24,8 @@ import { FluentProvider, FluentProviderProps, teamsDarkTheme, teamsLightTheme, w
 import { Helper } from '../../Common/Helper';
 import { PropertyPaneFieldRuleEditor } from '../Controls/PropertyPaneFieldRuleEditor';
 import { IRuleEntry } from '../../Common/IRuleEntry';
+import { CustomCollectionFieldType, ICustomDropdownOption, PropertyFieldCollectionData } from '@pnp/spfx-property-controls';
+import { IRESTLookupDefinition } from '../../Common/IRESTLookupDefinition';
 
 export enum AppMode {
   SharePoint, SharePointLocal, Teams, TeamsLocal, Office, OfficeLocal, Outlook, OutlookLocal
@@ -32,7 +34,7 @@ export enum AppMode {
 export interface IDynamicFormularGeneratorWebPartProps {
   description: string;
   successMessage: string;
-  //currentSite: boolean;
+  fieldRESTLoookup: IRESTLookupDefinition[];
   siteUrl: string;
   crossSite: IPropertyFieldSite[],
   sourceListName: string;
@@ -83,6 +85,7 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
         addDataLinkInEMail: this.properties.addDataLinkInEMail,
         enablePrint: this.properties.enablePrint,
         wpContext: this.context,
+        RESTLookupDefinition: this.properties.fieldRESTLoookup
       }
     );
 
@@ -288,14 +291,6 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
     const grp: IPropertyPaneGroup = {
       groupName: strings.GroupListViewData,
       groupFields: [
-        /*PropertyPaneToggle('currentSite', {
-          label: strings.DataListSourceLabel,
-          onText: strings.DataListSourceCurrentLabel,
-          offText: strings.DataListSourceExternLabel,
-          offAriaLabel: strings.DataListSourceExternLabel,
-          onAriaLabel: strings.DataListSourceCurrentLabel,
-          checked: true
-        }),*/
         PropertyFieldSitePicker('crossSite', {
           label: 'Select source site',
           initialSites: this.properties.crossSite,
@@ -331,7 +326,54 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
             console.log(fieldRules); // TO JSON AND save
             this.properties.addionalFieldRules = fieldRules;
           },
-        })
+        }),
+        PropertyFieldCollectionData("fieldRESTLoookup", {
+          key: "fieldProperties",
+          label: "REST-Data Service",
+          panelHeader: "REST Lookup fields",
+          manageBtnLabel: "Set lookup fields",
+          value: this.properties.fieldRESTLoookup,
+          fields: [
+            {
+              id: "SourceColumnInternalName",
+              title: "List column",
+              type: CustomCollectionFieldType.dropdown,
+              options: (): ICustomDropdownOption[] => {
+                return this.fieldsInView?.map(col => {
+                  return {
+                    key: col.key,
+                    text: col.text
+                  };
+                }) as ICustomDropdownOption[];
+              },
+              required: true
+            },
+            {
+              id: "RestEndpointUrl",
+              title: "REST endpoint",
+              type: CustomCollectionFieldType.url,
+              required: true
+            },
+            {
+              id: "CollectionPropertyName",
+              title: "Collection property name",
+              type: CustomCollectionFieldType.string,
+              required: true
+            },
+            {
+              id: "IDPropertyName",
+              title: "ID property name",
+              type: CustomCollectionFieldType.string,
+              required: true
+            },
+            {
+              id: "DisplayPropertyName",
+              title: "Text property name",
+              type: CustomCollectionFieldType.string,
+              required: true
+            }
+          ]
+        }),
       ]
     };
     return grp;

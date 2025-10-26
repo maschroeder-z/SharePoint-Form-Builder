@@ -1,6 +1,7 @@
 import { SPHttpClient } from '@microsoft/sp-http';
 import { IRuleEntry } from './IRuleEntry';
 import { LinkFieldValue } from './LinkFieldValue';
+import { IRESTLookupDefinition } from './IRESTLookupDefinition';
 export interface ISPListFields {
     value: ISPListField[];
 }
@@ -59,5 +60,6 @@ export interface ISPListField {
     IsDependentLookup: boolean;
     DependentLookupInternalNames: string[];
     AddionalRule: IRuleEntry;
+    RESTLookup: IRESTLookupDefinition;
 }
 //# sourceMappingURL=ISPListFields.d.ts.map

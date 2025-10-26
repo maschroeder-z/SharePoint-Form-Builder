@@ -357,6 +357,7 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
         />
       </div>);
     }
+    // TODO: check REST endpoint and add Combobox for selection
     return (<div>
       <Input name={this.props.InternalName} id={this.props.InternalName}
         defaultValue={this.props.DefaultValue}

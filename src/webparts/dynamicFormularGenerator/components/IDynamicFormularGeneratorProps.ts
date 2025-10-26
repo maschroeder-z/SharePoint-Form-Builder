@@ -1,10 +1,11 @@
 import { SPHttpClient } from '@microsoft/sp-http';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { IRuleEntry } from '../../../Common/IRuleEntry';
+import { IRESTLookupDefinition } from '../../../Common/IRESTLookupDefinition';
 
 export interface IDynamicFormularGeneratorProps {
   description: string;
-  isDarkTheme: boolean;  
+  isDarkTheme: boolean;
   hasTeamsContext: boolean;
   userDisplayName: string;
   viewID: string;
@@ -13,14 +14,15 @@ export interface IDynamicFormularGeneratorProps {
   httpClient: SPHttpClient;
   siteURL: string;
   successMessage: string;
-  uploads:number;
-  allowedUploadFileTypes:string;
-  addionalFieldRules: {[key: string]: IRuleEntry};
+  uploads: number;
+  allowedUploadFileTypes: string;
+  addionalFieldRules: { [key: string]: IRuleEntry };
   emailSubject: string;
-  emailLeadText:string;
+  emailLeadText: string;
   currentUserEMail: string;
-  sendConfirmationEMail:boolean;
-  addDataLinkInEMail:boolean;
+  sendConfirmationEMail: boolean;
+  addDataLinkInEMail: boolean;
   enablePrint: boolean;
   wpContext: WebPartContext;
+  RESTLookupDefinition: IRESTLookupDefinition[];
 }

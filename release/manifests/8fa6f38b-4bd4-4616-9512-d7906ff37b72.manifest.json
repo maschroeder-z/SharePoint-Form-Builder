@@ -120,6 +120,11 @@
           "en-US": "DynamicFormularGeneratorWebPartStrings_en-us.js"
         },
         "defaultPath": "DynamicFormularGeneratorWebPartStrings_en-us.js"
+      },
+      "@microsoft/sp-page-context": {
+        "type": "component",
+        "id": "1c4541f7-5c31-41aa-9fa8-fbc9dc14c0a8",
+        "version": "1.21.1"
       }
     }
   }
