@@ -1,3 +1,19 @@
+NOTES:
+https://stackblitz.com/edit/remote-data-fluintui-combbox?file=index.html,src%2Findex.tsx,src%2FApp.tsx,src%2Fmain.tsx
+https://stackblitz.com/edit/fxzezjk9-eweftyxd?file=src%2Fexample.tsx
+
+https://www.openplzapi.org/en/api/
+https://stackblitz.com/
+
+https://www.odata.org/odata-services/
+https://medium.com/@manojtharindu11/mastering-typescripts-map-method-for-efficient-array-transformation-e9afb069ee46
+https://carlrippon.com/fetch-with-async-await-and-typescript/
+https://legacy.reactjs.org/docs/hooks-state.html
+
+https://storybooks.fluentui.dev/react/?path=/docs/concepts-introduction--docs
+https://fluent2.microsoft.design/get-started/whatisnew
+https://storybooks.fluentui.dev/react/iframe.html?viewMode=docs&id=components-combobox--docs
+
 # Upgrade project dev-sky Dynamic Form App to v1.21.1
 
 Date: 18.9.2025
