@@ -1,7 +1,7 @@
 export interface IRESTLookupDefinition {
     SourceColumnInternalName: string,
-    RESTEndpoint: string,
+    RestEndpointUrl: string,
     CollectionPropertyName: string,
-    IDPropertyName: boolean,
+    IDPropertyName: string,
     DisplayPropertyName: string
 }

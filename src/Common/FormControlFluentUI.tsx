@@ -1,4 +1,4 @@
-import { Dropdown, Option, Checkbox, Input, Label, Radio, RadioGroup, RadioGroupOnChangeData, Textarea, InputOnChangeData, Field, InfoLabel } from '@fluentui/react-components';
+import { Dropdown, Option, Checkbox, Input, Label, Radio, RadioGroup, RadioGroupOnChangeData, Textarea, InputOnChangeData, Field, InfoLabel, ComboboxProps, Combobox } from '@fluentui/react-components';
 import * as React from 'react';
 import { FieldTypes } from './FieldTypes';
 import { SPHttpClient } from '@microsoft/sp-http';
@@ -44,7 +44,7 @@ import { ChangeEvent } from 'react';
 type FormFieldState = {
   errorMessage: string;
   currentFormValue: LinkFieldValue | string | string[] | boolean | ChoiceValue | Date;
-  lookupChoices?: ChoiceValue[];
+  lookupChoices?: ChoiceValue[];  
 }
 
 type DropDownSelection = {
@@ -357,7 +357,52 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
         />
       </div>);
     }
-    // TODO: check REST endpoint and add Combobox for selection
+    // REST endpoints
+    const onOptionSelect: ComboboxProps['onOptionSelect'] = (e, data) => {
+      this.setState({
+        currentFormValue: data.optionText ?? ''
+      });      
+    };
+    console.log(this.props.RESTLookup);
+    if (typeof this.props.RESTLookup !== "undefined" && this.props.RESTLookup !== null)
+    {
+      return (<div>
+        <Combobox    
+          inlinePopup={true}
+          value={this.state.currentFormValue as string}       
+          id={this.props.InternalName}          
+          onOptionSelect={onOptionSelect}
+          onChange={async (ev:React.ChangeEvent<HTMLInputElement>) => {          
+            if (ev.target.value.length > 0) {
+              this.setState({
+                currentFormValue: ev.target.value ?? ''
+              });              
+              const response = await fetch(this.props.RESTLookup.RestEndpointUrl.replace("@@VALUE@@", ev.target.value));
+              const body = await response.json();            
+              const mapped = body[this.props.RESTLookup.CollectionPropertyName].map((n: any) => {
+                return  { Title: n.LastName+", "+n.FirstName, Value: n[this.props.RESTLookup.IDPropertyName] } as ChoiceValue;
+              });           
+              this.setState({
+                lookupChoices: mapped
+              }); 
+            }
+            else
+            {
+              this.setState({
+                currentFormValue: ev.target.value ?? ''
+              });                
+            }
+          }}
+        >
+          {this.state.lookupChoices && this.state.lookupChoices.map((element:ChoiceValue) => (
+            <Option key={element.Value}>
+              {element.Title}
+            </Option>
+          ))}
+        </Combobox>
+      </div>);
+    }
+
     return (<div>
       <Input name={this.props.InternalName} id={this.props.InternalName}
         defaultValue={this.props.DefaultValue}
