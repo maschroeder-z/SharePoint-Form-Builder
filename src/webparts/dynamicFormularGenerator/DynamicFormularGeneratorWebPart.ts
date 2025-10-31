@@ -24,7 +24,7 @@ import { FluentProvider, FluentProviderProps, teamsDarkTheme, teamsLightTheme, w
 import { Helper } from '../../Common/Helper';
 import { PropertyPaneFieldRuleEditor } from '../Controls/PropertyPaneFieldRuleEditor';
 import { IRuleEntry } from '../../Common/IRuleEntry';
-import { CustomCollectionFieldType, ICustomDropdownOption, PropertyFieldCollectionData } from '@pnp/spfx-property-controls';
+import { CustomCollectionFieldType, DateConvention, ICustomDropdownOption, IDateTimeFieldValue, PropertyFieldCollectionData, PropertyFieldDateTimePicker, TimeConvention } from '@pnp/spfx-property-controls';
 import { IRESTLookupDefinition } from '../../Common/IRESTLookupDefinition';
 
 export enum AppMode {
@@ -48,6 +48,10 @@ export interface IDynamicFormularGeneratorWebPartProps {
   emailHeader: string;
   addDataLinkInEMail: boolean;
   enablePrint: boolean;
+  validFrom: IDateTimeFieldValue | null;
+  validTo: IDateTimeFieldValue | null;
+  msgFormNotPublished: string,
+  msgFormExpired: string
 }
 
 export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPart<IDynamicFormularGeneratorWebPartProps> {
@@ -85,7 +89,11 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
         addDataLinkInEMail: this.properties.addDataLinkInEMail,
         enablePrint: this.properties.enablePrint,
         wpContext: this.context,
-        RESTLookupDefinition: this.properties.fieldRESTLoookup
+        RESTLookupDefinition: this.properties.fieldRESTLoookup,
+        validFrom: this.properties.validFrom,
+        validTo: this.properties.validTo,
+        msgFormNotPublished: this.properties.msgFormNotPublished,
+        msgFormExpired: this.properties.msgFormExpired
       }
     );
 
@@ -379,6 +387,46 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
     return grp;
   }
 
+  protected get getMiscConfiguration(): IPropertyPaneGroup {
+    const grp: IPropertyPaneGroup = {
+      groupName: strings.GroupMiscSettings,
+      groupFields: [
+
+        PropertyFieldDateTimePicker('validFrom', {
+          label: strings.DateTimeFieldLabel,
+          initialDate: this.properties.validFrom,
+          dateConvention: DateConvention.DateTime,
+          timeConvention: TimeConvention.Hours24,
+          onPropertyChange: this.onPropertyPaneFieldChanged,
+          properties: this.properties,
+          onGetErrorMessage: undefined,
+          key: 'validFrom'
+        }),
+        PropertyPaneTextField('msgFormNotPublished', {
+          label: strings.FormValidFromFieldLabel,
+          multiline: true,
+          resizable: true
+        }),
+        PropertyFieldDateTimePicker('validTo', {
+          label: strings.DateTimeFieldLabel,
+          initialDate: this.properties.validTo,
+          dateConvention: DateConvention.DateTime,
+          timeConvention: TimeConvention.Hours24,
+          onPropertyChange: this.onPropertyPaneFieldChanged,
+          properties: this.properties,
+          onGetErrorMessage: undefined,
+          key: 'validTo'
+        }),
+        PropertyPaneTextField('msgFormExpired', {
+          label: strings.FormValidToFieldLabel,
+          multiline: true,
+          resizable: true
+        }),
+      ]
+    };
+    return grp;
+  }
+
   protected onPropertyPaneConfigurationStart(): void {
     this.loadWPConfigInformation();
   }
@@ -443,7 +491,8 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
                   step: 1
                 })
               ]
-            }
+            },
+            this.getMiscConfiguration
           ]
         },
 

@@ -4,6 +4,7 @@ import { IPropertyFieldSite } from "@pnp/spfx-property-controls/lib/PropertyFiel
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import { IRuleEntry } from '../../Common/IRuleEntry';
+import { IDateTimeFieldValue } from '@pnp/spfx-property-controls';
 import { IRESTLookupDefinition } from '../../Common/IRESTLookupDefinition';
 export declare enum AppMode {
     SharePoint = 0,
@@ -34,6 +35,10 @@ export interface IDynamicFormularGeneratorWebPartProps {
     emailHeader: string;
     addDataLinkInEMail: boolean;
     enablePrint: boolean;
+    validFrom: IDateTimeFieldValue | null;
+    validTo: IDateTimeFieldValue | null;
+    msgFormNotPublished: string;
+    msgFormExpired: string;
 }
 export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPart<IDynamicFormularGeneratorWebPartProps> {
     private _isDarkTheme;
@@ -55,6 +60,7 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
     private loadAvailableLists;
     protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: any, newValue: any): void;
     protected get getSourceConfiguration(): IPropertyPaneGroup;
+    protected get getMiscConfiguration(): IPropertyPaneGroup;
     protected onPropertyPaneConfigurationStart(): void;
     protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration;
 }

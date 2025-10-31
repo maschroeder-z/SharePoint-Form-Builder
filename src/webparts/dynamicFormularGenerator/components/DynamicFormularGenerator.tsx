@@ -393,12 +393,38 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
           <ul>
             <li>{strings.CFGChooseList}</li>
             <li>{strings.CFGChooseView}</li>
+            <li>{strings.ErrorMissingSiteText}</li>
           </ul>
           <Button onClick={this._onConfigure}>{strings.CFGBTNConfigure}</Button>
         </div>
       );
     }
     else {
+      const currentDate = new Date();
+      console.log(this.props.validFrom.value, currentDate);
+      let rawFrom = this.props.validFrom.value instanceof Date ? this.props.validFrom.value : new Date(this.props.validFrom.value as any);
+      let rawTo = this.props.validTo.value instanceof Date ? this.props.validTo.value : new Date(this.props.validTo.value as any);
+      if (this.props.validFrom !== null && rawFrom >= currentDate) {
+        let msgNotPublished = this.props.msgFormNotPublished;
+        if (msgNotPublished !== undefined && msgNotPublished === null && msgNotPublished.length > 0) {
+          msgNotPublished = msgNotPublished.replace("@Date", rawFrom.toLocaleDateString()).replace("@Time", rawFrom.toLocaleTimeString());
+        }
+        return (<div>
+          {msgNotPublished && <h1>{msgNotPublished}</h1>}
+          <img src={require('../../../assets/form-closed@800x600.png')} alt="Formular geschlossen" />
+        </div>);
+      }
+      if (this.props.validTo !== null && rawTo < currentDate) {
+        let msgNotPublished = this.props.msgFormExpired
+        if (msgNotPublished !== undefined && msgNotPublished === null && msgNotPublished.length > 0) {
+          msgNotPublished = msgNotPublished.replace("@Date", rawTo.toLocaleDateString()).replace("@Time", rawTo.toLocaleTimeString());
+        }
+        return (<div>
+          {msgNotPublished && <h1>{msgNotPublished}</h1>}
+          <img src={require('../../../assets/form-closed@800x600.png')} alt="Formular geschlossen" />
+        </div>);
+      }
+
       this.qryFormFields();
       //ref={(el) => this.mainForm = el}
       return (

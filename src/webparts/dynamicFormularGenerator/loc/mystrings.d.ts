@@ -1,28 +1,33 @@
 declare interface IDynamicFormularGeneratorWebPartStrings {
   PropertyPaneDescription: string;
   GroupListViewData: string;
-  DataListSourceLabel:string;
-  DataListSourceCurrentLabel:string;
-  DataListSourceExternLabel:string;
-  ChooseList:string;
-  ChooseView:string;
+  DataListSourceLabel: string;
+  DataListSourceCurrentLabel: string;
+  DataListSourceExternLabel: string;
+  ChooseList: string;
+  ChooseView: string;
   BasicGroupName: string;
   DescriptionFieldLabel: string;
   SuccessMessageLabel: string;
   NoOfFileUploads: string;
-  FieldRulesLabel:string;
+  FieldRulesLabel: string;
   URLOfExternalSitePlaceholderLabel: string;
   ErrorMissingSiteText: string;
   AllowedUploadFileTypesLabel: string;
   EmailSubjectLable: string;
-  EmailHeaderLabel:string;
+  EmailHeaderLabel: string;
   SendEMailWithFormDataLabel: string;
   SendEMailWithFormDataYesLabel: string;
   SendEMailWithFormDataNoLabel: string;
   AddDataLinkToEMailLabel: string;
   AttachmentLabel: string;
-  AttachmentIndexLabel: string;  
+  AttachmentIndexLabel: string;
   EnablePrintLabel: string;
+
+  GroupMiscSettings: string;
+  DateTimeFieldLabel: string;
+  FormValidFromFieldLabel: string;
+  FormValidToFieldLabel: string;
 
   LabelYES: string,
   LabelNO: string,
@@ -30,20 +35,20 @@ declare interface IDynamicFormularGeneratorWebPartStrings {
   VALMsgRequiredField: string;
   VALMsgInvalidFieldData: string;
   VALMsgOnlyNumbersAllowed: string;
-  VALMsgDecimalInvalid:string;
-  VALMsgvalueRangeOverflow:string;
+  VALMsgDecimalInvalid: string;
+  VALMsgvalueRangeOverflow: string;
 
-  CFGHeader:string;
-  CFGChooseList:string;
-  CFGChooseView:string;
-  CFGBTNConfigure:string;
+  CFGHeader: string;
+  CFGChooseList: string;
+  CFGChooseView: string;
+  CFGBTNConfigure: string;
 
-  MAILLinkTodata:string;
-  MSGWaiting:string;
-  BTNSendFormData:string;
-  BTNPrintFormData:string;
-  BTNResetFormData:string;
-  HEADPrintForm:string;
+  MAILLinkTodata: string;
+  MSGWaiting: string;
+  BTNSendFormData: string;
+  BTNPrintFormData: string;
+  BTNResetFormData: string;
+  HEADPrintForm: string;
 
   AppLocalEnvironmentSharePoint: string;
   AppLocalEnvironmentTeams: string;
