@@ -1,25 +1,44 @@
-@import '~@fluentui/react/dist/sass/References.scss';
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.row {
+  @include ms-Grid-row;
+  padding: 0px;
+}
+
+.colSM4 {
+  @include ms-Grid-col;
+  @include ms-sm4;
+}
+
+.colSM8 {
+  @include ms-Grid-col;
+  @include ms-sm8;
+}
 
 .dynamicFormularGenerator {
   overflow: hidden;
   padding: 1em;
   color: "[theme:bodyText, default: #323130]";
   color: var(--bodyText);
+
   &.teams {
     font-family: $ms-font-family-fallbacks;
   }
-  
 }
 
 .configWrapper {
-  padding:20px;
+  padding: 20px;
   background-color: #ccc;
+}
+
+.cfgDetails {
+  padding-top: 35px;
 }
 
 .configWrapper h2 {
   display: inline-flex;
   padding-left: 10px;
-  vertical-align: super;  
+  vertical-align: super;
   margin: 0px;
 }
 
@@ -40,13 +59,14 @@
     display: inline;
     margin-right: 8px;
   }
+
   div {
     padding-bottom: 10px;
   }
 }
 
 
-.links {
+/*.links {
   a {
     text-decoration: none;
     color: "[theme:link, default:#03787c]";
@@ -58,7 +78,7 @@
       color: var(--linkHovered); // note: CSS Custom Properties support is limited to modern browsers only
     }
   }
-}
+}*/
 
 .cmdWrapper {
   border-top: solid 1px #ccc;

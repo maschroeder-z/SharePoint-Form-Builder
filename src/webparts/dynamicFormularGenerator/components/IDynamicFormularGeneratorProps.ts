@@ -30,4 +30,5 @@ export interface IDynamicFormularGeneratorProps {
   validTo: IDateTimeFieldValue | null;
   msgFormNotPublished: string;
   msgFormExpired: string;
+  contentTypeID: string;
 }

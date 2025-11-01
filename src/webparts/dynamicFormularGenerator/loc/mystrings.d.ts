@@ -43,6 +43,8 @@ declare interface IDynamicFormularGeneratorWebPartStrings {
   CFGChooseView: string;
   CFGBTNConfigure: string;
 
+  ChooseContentType: string;
+
   MAILLinkTodata: string;
   MSGWaiting: string;
   BTNSendFormData: string;

@@ -20,12 +20,13 @@ import DynamicFormularGenerator from './components/DynamicFormularGenerator';
 import { IDynamicFormularGeneratorProps } from './components/IDynamicFormularGeneratorProps';
 import { ISPLists } from '../../Common/ISPLists';
 import { ISPView, ISPViews } from '../../Common/ISPListViews';
-import { FluentProvider, FluentProviderProps, teamsDarkTheme, teamsLightTheme, webLightTheme, webDarkTheme, Theme } from '@fluentui/react-components';
+import { FluentProvider, FluentProviderProps, teamsDarkTheme, teamsLightTheme, webLightTheme, webDarkTheme, Theme, IdPrefixProvider } from '@fluentui/react-components';
 import { Helper } from '../../Common/Helper';
 import { PropertyPaneFieldRuleEditor } from '../Controls/PropertyPaneFieldRuleEditor';
 import { IRuleEntry } from '../../Common/IRuleEntry';
 import { CustomCollectionFieldType, DateConvention, ICustomDropdownOption, IDateTimeFieldValue, PropertyFieldCollectionData, PropertyFieldDateTimePicker, TimeConvention } from '@pnp/spfx-property-controls';
 import { IRESTLookupDefinition } from '../../Common/IRESTLookupDefinition';
+import { IContentType } from '../../Common/IContentType';
 
 export enum AppMode {
   SharePoint, SharePointLocal, Teams, TeamsLocal, Office, OfficeLocal, Outlook, OutlookLocal
@@ -51,7 +52,8 @@ export interface IDynamicFormularGeneratorWebPartProps {
   validFrom: IDateTimeFieldValue | null;
   validTo: IDateTimeFieldValue | null;
   msgFormNotPublished: string,
-  msgFormExpired: string
+  msgFormExpired: string,
+  contentTypeID: string;
 }
 
 export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPart<IDynamicFormularGeneratorWebPartProps> {
@@ -62,6 +64,7 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
   private availableLists: IPropertyPaneDropdownOption[] = [];
   private viewsInList: IPropertyPaneDropdownOption[] = [];
   private viewData: ISPView[] = null;
+  private contentTypesInList: IContentType[] = null;
   private fieldsInView: IPropertyPaneDropdownOption[] = null;
   private loadingLists: boolean = false;
 
@@ -93,7 +96,8 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
         validFrom: this.properties.validFrom,
         validTo: this.properties.validTo,
         msgFormNotPublished: this.properties.msgFormNotPublished,
-        msgFormExpired: this.properties.msgFormExpired
+        msgFormExpired: this.properties.msgFormExpired,
+        contentTypeID: this.properties.contentTypeID
       }
     );
 
@@ -110,7 +114,9 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
       element
     );
 
-    ReactDom.render(fluentElement, this.domElement);
+    const temp: React.ReactElement = React.createElement(IdPrefixProvider, { value: "msz" }, fluentElement);
+
+    ReactDom.render(temp, this.domElement);
   }
 
   /*protected onInit(): Promise<void> {
@@ -185,6 +191,18 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
     return;
   }
 
+  private async GetContentTypes4List(listID: Guid): Promise<IContentType[]> {
+    const endpoint = `${this.GetSelectedUrl()}/_api/web/lists/getbyid('${listID}')/ContentTypes`;
+    const result = await this.context.spHttpClient.get(endpoint, SPHttpClient.configurations.v1);
+    const data = await result.json();
+    const resultList = (data as any).value as IContentType[];
+    resultList.unshift({
+      Name: "Default",
+      Id: { StringValue: "0" }
+    } as IContentType);
+    return resultList;
+  }
+
   private qryListInformation(): Promise<ISPLists> {
     const endpoint: string = `${this.GetSelectedUrl()}/_api/web/lists/`;
     return this.context.spHttpClient.get(
@@ -195,6 +213,7 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
         return response.json();
       });
   }
+
   private qryViews4List(listID: Guid): Promise<ISPViews> {
     const endpoint = `${this.GetSelectedUrl()}/_api/web/lists/getbyid('${listID}')/views`;
     return this.context.spHttpClient.get(
@@ -207,7 +226,6 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
   }
 
   private async loadAvailableLists(): Promise<void> {
-    console.log("URL", this.GetSelectedUrl());
     this.loadingLists = true;
     let options: IPropertyPaneDropdownOption[] = [];
     try {
@@ -217,7 +235,8 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
           options.push({ key: libs.Id, text: `${libs.Title} (${libs.ItemCount})` });
         });
         if (typeof (this.properties.sourceListName) !== "undefined" && this.properties.sourceListName.trim().length > 0) {
-          const viewData: ISPViews = await this.qryViews4List(Guid.parse(this.properties.sourceListName));
+          const listID: Guid = Guid.parse(this.properties.sourceListName);
+          const viewData: ISPViews = await this.qryViews4List(listID);
           this.viewsInList = [];
           this.viewData = viewData.value;
           viewData.value.forEach(item => {
@@ -228,6 +247,7 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
               });
             }
           });
+          this.contentTypesInList = await this.GetContentTypes4List(listID);
           this.render();
           this.context.propertyPane.refresh();
           this.onPropertyPaneFieldChanged("viewID", null, this.properties.viewID);
@@ -252,16 +272,6 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
       this.properties.sourceListName = undefined;
       this.loadAvailableLists();
     }
-    /*if (propertyPath === 'currentSite') {
-      console.log("changed prop", oldValue, newValue);
-      this.availableLists = [];
-      this.properties.sourceListName = "";
-      this.properties.crossSite = [];
-      if (newValue) {
-        this.loadAvailableLists();
-      }
-      this.context.propertyPane.refresh();
-    }*/
     if (propertyPath === 'sourceListName' && newValue) {
       super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);
       delete this.properties.viewXML;
@@ -277,6 +287,10 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
               text: item.Title
             });
           }
+        });
+        this.GetContentTypes4List(newValue).then((ctData) => {
+          this.contentTypesInList = ctData;
+          this.context.propertyPane.refresh();
         });
         this.viewsInList = newListViews;
         this.context.statusRenderer.clearLoadingIndicator(this.domElement);
@@ -323,6 +337,17 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
           label: strings.ChooseView,
           disabled: this.viewsInList.length === 0,
           selectedKey: this.properties.viewID,
+        }),
+        PropertyPaneDropdown('contentTypeID', {
+          options: this.contentTypesInList?.map(ct => {
+            return {
+              key: ct.Id.StringValue,
+              text: ct.Name
+            };
+          }) || [],
+          label: strings.ChooseContentType,
+          disabled: this.contentTypesInList?.length === 0,
+          selectedKey: this.properties.contentTypeID,
         }),
         new PropertyPaneFieldRuleEditor('fieldRulesSettings', {
           label: strings.FieldRulesLabel,

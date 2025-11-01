@@ -44,7 +44,7 @@ import { ChangeEvent } from 'react';
 type FormFieldState = {
   errorMessage: string;
   currentFormValue: LinkFieldValue | string | string[] | boolean | ChoiceValue | Date;
-  lookupChoices?: ChoiceValue[];  
+  lookupChoices?: ChoiceValue[];
 }
 
 type DropDownSelection = {
@@ -154,7 +154,7 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
 
   private async qryLookupListData(): Promise<void> {
     const filterFields = this.props.DependentLookupInternalNames.map(fieldName => {
-      return `StaticName%20eq%20%27${fieldName}%27%20or%20Title%20eq%20%27${fieldName}%27`;
+      return `StaticName%20eq%20%27${fieldName.replace("_x0020_", "")}%27%20or%20StaticName%20eq%20%27${fieldName}%27%20or%20Title%20eq%20%27${fieldName}%27`;
     }).join("%20or%20");
 
     const endpointFields = `${this.props.SiteUrl}/_api/web/lists/getbyid('${this.props.LookupField.List}')/Fields?$filter=${filterFields}`;
@@ -170,7 +170,8 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
       details = "";
       if (this.props.DependentLookupInternalNames !== null && this.props.DependentLookupInternalNames.length > 0) {
         details = this.props.DependentLookupInternalNames.map(fieldName => {
-          return this.formatFieldValue(item[fieldName], lookupFieldInfo.value.filter(x => x.StaticName === fieldName || x.Title === fieldName)[0])
+          const field = lookupFieldInfo.value.filter(f => f.StaticName === fieldName || f.Title === fieldName || f.StaticName === fieldName.replace("_x0020_", ""))[0];
+          return this.formatFieldValue(item[field.StaticName], field);
         }).filter(x => x.length > 0).join(" | ");
       }
       choices.push({
@@ -185,7 +186,7 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
   }
 
   private formatFieldValue(rawValue: string, field: ISPListField): string {
-    if (field !== null && rawValue !== null) {
+    if (field !== undefined && field !== null && rawValue !== null) {
       if (field.FieldTypeKind === FieldTypes.DATETIME) {
         const dateObj: Date = new Date(rawValue);
         return dateObj.toLocaleDateString();
@@ -361,40 +362,38 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
     const onOptionSelect: ComboboxProps['onOptionSelect'] = (e, data) => {
       this.setState({
         currentFormValue: data.optionText ?? ''
-      });      
+      });
     };
     console.log(this.props.RESTLookup);
-    if (typeof this.props.RESTLookup !== "undefined" && this.props.RESTLookup !== null)
-    {
+    if (typeof this.props.RESTLookup !== "undefined" && this.props.RESTLookup !== null) {
       return (<div>
-        <Combobox    
+        <Combobox
           inlinePopup={true}
-          value={this.state.currentFormValue as string}       
-          id={this.props.InternalName}          
+          value={this.state.currentFormValue as string}
+          id={this.props.InternalName}
           onOptionSelect={onOptionSelect}
-          onChange={async (ev:React.ChangeEvent<HTMLInputElement>) => {          
+          onChange={async (ev: React.ChangeEvent<HTMLInputElement>) => {
             if (ev.target.value.length > 0) {
               this.setState({
                 currentFormValue: ev.target.value ?? ''
-              });              
+              });
               const response = await fetch(this.props.RESTLookup.RestEndpointUrl.replace("@@VALUE@@", ev.target.value));
-              const body = await response.json();            
+              const body = await response.json();
               const mapped = body[this.props.RESTLookup.CollectionPropertyName].map((n: any) => {
-                return  { Title: n.LastName+", "+n.FirstName, Value: n[this.props.RESTLookup.IDPropertyName] } as ChoiceValue;
-              });           
+                return { Title: n.LastName + ", " + n.FirstName, Value: n[this.props.RESTLookup.IDPropertyName] } as ChoiceValue;
+              });
               this.setState({
                 lookupChoices: mapped
-              }); 
+              });
             }
-            else
-            {
+            else {
               this.setState({
                 currentFormValue: ev.target.value ?? ''
-              });                
+              });
             }
           }}
         >
-          {this.state.lookupChoices && this.state.lookupChoices.map((element:ChoiceValue) => (
+          {this.state.lookupChoices && this.state.lookupChoices.map((element: ChoiceValue) => (
             <Option key={element.Value}>
               {element.Title}
             </Option>

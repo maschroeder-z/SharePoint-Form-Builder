@@ -31,5 +31,6 @@ export interface IDynamicFormularGeneratorProps {
     validTo: IDateTimeFieldValue | null;
     msgFormNotPublished: string;
     msgFormExpired: string;
+    contentTypeID: string;
 }
 //# sourceMappingURL=IDynamicFormularGeneratorProps.d.ts.map

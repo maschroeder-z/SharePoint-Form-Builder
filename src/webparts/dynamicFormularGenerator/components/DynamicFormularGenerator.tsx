@@ -289,6 +289,10 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
     });
     // Datetime: http://blog.plataformatec.com.br/2014/11/how-to-serialize-date-and-datetime-without-losing-information/
     // https://learn.microsoft.com/en-us/previous-versions/office/sharepoint-visio/jj246742(v=office.15)
+    // Content-Type: https://sharepoint.stackexchange.com/questions/187963/rest-add-list-item-of-custom-content-type
+    if (this.props.contentTypeID && this.props.contentTypeID.length > 0 && this.props.contentTypeID !== "0") {
+      fieldToSave["ContentTypeId"] = this.props.contentTypeID;
+    }
     this.props.httpClient.post(`${this.props.siteURL}/_api/web/lists/getbyid('${this.props.listID}')/items`,
       SPHttpClient.configurations.v1,
       {
@@ -387,41 +391,50 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
   public render(): React.ReactElement<IDynamicFormularGeneratorProps> {
     if (!this.validateConfiguration()) {
       return (
-        <div className={styles.configWrapper}>
-          <FlashSettings24Regular />
-          <h2>{strings.CFGHeader}</h2>
-          <ul>
-            <li>{strings.CFGChooseList}</li>
-            <li>{strings.CFGChooseView}</li>
-            <li>{strings.ErrorMissingSiteText}</li>
-          </ul>
-          <Button onClick={this._onConfigure}>{strings.CFGBTNConfigure}</Button>
+        <div className={`${styles.row} ${styles.configWrapper}`}>
+          <div className={styles.colSM4}>
+            <img src={require('../../../assets/superherobuilder@200.png')} alt="Super hero form builder" />
+          </div>
+          <div className={`${styles.colSM8} ${styles.cfgDetails}`}>
+            <FlashSettings24Regular />
+            <h2>{strings.CFGHeader}</h2>
+            <ul>
+              <li>{strings.CFGChooseList}</li>
+              <li>{strings.CFGChooseView}</li>
+              <li>{strings.ErrorMissingSiteText}</li>
+            </ul>
+            <Button onClick={this._onConfigure}>{strings.CFGBTNConfigure}</Button>
+          </div>
         </div>
       );
     }
     else {
       const currentDate = new Date();
-      console.log(this.props.validFrom.value, currentDate);
-      let rawFrom = this.props.validFrom.value instanceof Date ? this.props.validFrom.value : new Date(this.props.validFrom.value as any);
-      let rawTo = this.props.validTo.value instanceof Date ? this.props.validTo.value : new Date(this.props.validTo.value as any);
-      if (this.props.validFrom !== null && rawFrom >= currentDate) {
+
+      let rawFrom: Date = null;
+      let rawTo: Date = null;
+
+      if (this.props.validFrom !== undefined) rawFrom = this.props.validFrom.value instanceof Date ? this.props.validFrom.value : new Date(this.props.validFrom.value as any);
+      if (this.props.validTo !== undefined) rawTo = this.props.validTo.value instanceof Date ? this.props.validTo.value : new Date(this.props.validTo.value as any);
+
+      if (rawFrom !== null && rawFrom >= currentDate) {
         let msgNotPublished = this.props.msgFormNotPublished;
         if (msgNotPublished !== undefined && msgNotPublished === null && msgNotPublished.length > 0) {
           msgNotPublished = msgNotPublished.replace("@Date", rawFrom.toLocaleDateString()).replace("@Time", rawFrom.toLocaleTimeString());
         }
         return (<div>
           {msgNotPublished && <h1>{msgNotPublished}</h1>}
-          <img src={require('../../../assets/form-closed@800x600.png')} alt="Formular geschlossen" />
+          <img src={require('../../../assets/form-closed@800x600.png')} alt={msgNotPublished} />
         </div>);
       }
-      if (this.props.validTo !== null && rawTo < currentDate) {
+      if (rawTo !== null && rawTo < currentDate) {
         let msgNotPublished = this.props.msgFormExpired
         if (msgNotPublished !== undefined && msgNotPublished === null && msgNotPublished.length > 0) {
           msgNotPublished = msgNotPublished.replace("@Date", rawTo.toLocaleDateString()).replace("@Time", rawTo.toLocaleTimeString());
         }
         return (<div>
           {msgNotPublished && <h1>{msgNotPublished}</h1>}
-          <img src={require('../../../assets/form-closed@800x600.png')} alt="Formular geschlossen" />
+          <img src={require('../../../assets/form-closed@800x600.png')} alt={msgNotPublished} />
         </div>);
       }
 

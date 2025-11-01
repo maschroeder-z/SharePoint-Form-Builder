@@ -39,6 +39,7 @@ export interface IDynamicFormularGeneratorWebPartProps {
     validTo: IDateTimeFieldValue | null;
     msgFormNotPublished: string;
     msgFormExpired: string;
+    contentTypeID: string;
 }
 export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPart<IDynamicFormularGeneratorWebPartProps> {
     private _isDarkTheme;
@@ -47,6 +48,7 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
     private availableLists;
     private viewsInList;
     private viewData;
+    private contentTypesInList;
     private fieldsInView;
     private loadingLists;
     render(): void;
@@ -55,6 +57,7 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
     protected get dataVersion(): Version;
     private GetSelectedUrl;
     private loadWPConfigInformation;
+    private GetContentTypes4List;
     private qryListInformation;
     private qryViews4List;
     private loadAvailableLists;
