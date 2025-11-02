@@ -28,7 +28,7 @@ define([], function () {
     "VALMsgInvalidFieldData": "The field contains invalid data.",
     "VALMsgOnlyNumbersAllowed": "Only numbers allowed",
     "VALMsgDecimalInvalid": "Only {0} position after decimal point possible.",
-    "VALMsgvalueRangeOverflow": "The entered value is not in the possible range: {0} to {1}",
+    "VALMsgvalueRangeOverflow": "The entered value is not in the possible range: {0} to: {1}",
 
     "CFGHeader": "Check your configuration",
     "CFGChooseList": "Choose a valid list.",
@@ -59,6 +59,20 @@ define([], function () {
     "FormValidFromFieldLabel": "Message when form is not yet published",
     "FormValidToFieldLabel": "Message when form has expired",
     "ChooseContentType": "Choose Content Type",
-    "MSGDataSendAlready": "The following data has been successfully submitted:"
+    "MSGDataSendAlready": "The following data has been successfully submitted:",
+
+    "RESTFieldLabelField": "Field Name",
+    "RESTFieldLabelUrl": "Service URL",
+    "RESTFieldLabelCollectionProperty": "Collection Property",
+    "RESTFieldLabelIDProperty": "ID Property",
+    "RESTFieldLabelDisplayProperty": "Display Property",
+    "RESTFieldLabelValueProperty": "Value Property",
+    "BTNConfigureRESTLookup": "Set remote lookups",
+    "RESTLookupConfigureTitle": "Configure REST lookup field",
+    "HEADConfigureRESTLookup": "Configure the REST endpoint and the properties to retrieve the data for the lookup field.",
+    "LBLRestLookupDescription": "Configure remote lookups",
+    "LBLFormMinValue": "Minimum value",
+    "LBLFormMaxValue": "Maximum value",
+    "LBLFormMaxMinValue": "till max."
   }
 });

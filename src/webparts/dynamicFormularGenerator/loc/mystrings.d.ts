@@ -62,6 +62,21 @@ declare interface IDynamicFormularGeneratorWebPartStrings {
   AppOutlookEnvironment: string;
 
   MSGDataSendAlready: string;
+
+  RESTFieldLabelField: string;
+  RESTFieldLabelUrl: string;
+  RESTFieldLabelCollectionProperty: string;
+  RESTFieldLabelIDProperty: string;
+  RESTFieldLabelDisplayProperty: string;
+  RESTFieldLabelValueProperty: string;
+
+  BTNConfigureRESTLookup: string;
+  HEADConfigureRESTLookup: string;
+  LBLRestLookupDescription: string;
+
+  LBLFormMinValue: string;
+  LBLFormMaxValue: string;
+  LBLFormMaxMinValue: string;
 }
 
 declare module 'DynamicFormularGeneratorWebPartStrings' {

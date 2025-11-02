@@ -362,14 +362,14 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
         }),
         PropertyFieldCollectionData("fieldRESTLoookup", {
           key: "fieldProperties",
-          label: "REST-Data Service",
-          panelHeader: "REST Lookup fields",
-          manageBtnLabel: "Set lookup fields",
+          label: strings.LBLRestLookupDescription,
+          panelHeader: strings.HEADConfigureRESTLookup,
+          manageBtnLabel: strings.BTNConfigureRESTLookup,
           value: this.properties.fieldRESTLoookup,
           fields: [
             {
               id: "SourceColumnInternalName",
-              title: "List column",
+              title: strings.RESTFieldLabelField,
               type: CustomCollectionFieldType.dropdown,
               options: (): ICustomDropdownOption[] => {
                 return this.fieldsInView?.map(col => {
@@ -383,27 +383,33 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
             },
             {
               id: "RestEndpointUrl",
-              title: "REST endpoint",
+              title: strings.RESTFieldLabelUrl,
               type: CustomCollectionFieldType.url,
               required: true
             },
             {
               id: "CollectionPropertyName",
-              title: "Collection property name",
+              title: strings.RESTFieldLabelCollectionProperty,
               type: CustomCollectionFieldType.string,
               required: true
             },
             {
               id: "IDPropertyName",
-              title: "ID property name",
+              title: strings.RESTFieldLabelIDProperty,
               type: CustomCollectionFieldType.string,
               required: true
             },
             {
               id: "DisplayPropertyName",
-              title: "Text property name",
+              title: strings.RESTFieldLabelDisplayProperty,
               type: CustomCollectionFieldType.string,
               required: true
+            },
+            {
+              id: "TargetValueListField",
+              title: strings.RESTFieldLabelValueProperty,
+              type: CustomCollectionFieldType.string,
+              required: false
             }
           ]
         }),

@@ -10,6 +10,7 @@ import { DatePicker } from "@fluentui/react-datepicker-compat";
 import { ErrorCircle24Filled, NumberSymbolSquare24Regular, TextNumberFormat24Filled, CurrencyDollarEuro24Filled } from '@fluentui/react-icons';
 import { ChangeEvent } from 'react';
 import { RestLookupFieldValue } from './RestLookupFieldValue';
+import * as strings from 'DynamicFormularGeneratorWebPartStrings';
 
 // https://fettblog.eu/typescript-react/hooks/#useeffect
 // https://hackwild.com/article/event-handling-techniques/
@@ -345,9 +346,9 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
     if (this.props.FieldTypeKind === FieldTypes.NUMBER || this.props.FieldTypeKind === FieldTypes.CURRENCY) {
       let placeHolder: string = "";
       if (Math.abs(this.props.MinimumValue) !== Number.MAX_VALUE)
-        placeHolder = `Min. Wert ${this.props.MinimumValue}`;
+        placeHolder = `${strings.LBLFormMinValue}: ${this.props.MinimumValue}`;
       if (this.props.MaximumValue !== Number.MAX_VALUE)
-        placeHolder = `${placeHolder.length > 0 ? placeHolder + " bis max. " : "Max. Wert: "} ${this.props.MaximumValue}`; // TODO i18n
+        placeHolder = `${placeHolder.length > 0 ? placeHolder + " " + strings.LBLFormMaxMinValue + ": " : strings.LBLFormMaxValue}: ${this.props.MaximumValue}`;
       return (<div>
         <Input name={this.props.InternalName} id={this.props.InternalName}
           onBlur={this._onBlurHandler}
@@ -365,6 +366,7 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
     if (typeof this.props.RESTLookup !== "undefined" && this.props.RESTLookup !== null) {
       return (<div>
         <Combobox
+          disabled={this.props.ReadOnlyField || this.props.IsDisabled}
           value={(this.state.currentFormValue !== null ? (this.state.currentFormValue as RestLookupFieldValue).Display : "")}
           id={this.props.InternalName}
           onOptionSelect={onOptionSelect}

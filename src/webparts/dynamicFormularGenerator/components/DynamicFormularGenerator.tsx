@@ -169,7 +169,6 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
 
         if (typeof this.props.RESTLookupDefinition !== "undefined" && this.props.RESTLookupDefinition !== null) {
           fieldInfo.RESTLookup = this.props.RESTLookupDefinition.filter(x => x.SourceColumnInternalName === fieldInfo.StaticName)[0];
-          console.log("REST", fieldInfo.RESTLookup);
         }
 
         if (typeof this.props.addionalFieldRules !== "undefined" && this.props.addionalFieldRules !== null) {
@@ -264,13 +263,13 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
 
       if (formEntry.RESTLookup !== undefined && formEntry.RESTLookup !== null) {
         const lookupValue: RestLookupFieldValue = formEntry.FormValue as RestLookupFieldValue;
-
         fieldToSave[formEntry.InternalName] = lookupValue.Display;
-
-        const fieldName: string = formEntry.InternalName + "Value";
-        const lookupValueField = this.availableFields.value.filter(f => f.InternalName === fieldName)[0];
-        if (lookupValueField !== undefined && lookupValueField !== null) {
-          fieldToSave[fieldName] = lookupValue.Value;
+        // check if addional value field exists
+        if (formEntry.RESTLookup.TargetValueListField.length > 0) {
+          const lookupValueField = this.availableFields.value.filter(f => f.InternalName === formEntry.RESTLookup.TargetValueListField)[0];
+          if (lookupValueField !== undefined && lookupValueField !== null) {
+            fieldToSave[formEntry.RESTLookup.TargetValueListField] = lookupValue.Value;
+          }
         }
       }
 

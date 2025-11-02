@@ -3,5 +3,6 @@ export interface IRESTLookupDefinition {
     RestEndpointUrl: string,
     CollectionPropertyName: string,
     IDPropertyName: string,
-    DisplayPropertyName: string
+    DisplayPropertyName: string,
+    TargetValueListField: string
 }
