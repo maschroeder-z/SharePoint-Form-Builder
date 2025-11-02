@@ -2,12 +2,13 @@ import { SPHttpClient } from '@microsoft/sp-http';
 import { IRuleEntry } from './IRuleEntry';
 import { LinkFieldValue } from './LinkFieldValue';
 import { IRESTLookupDefinition } from './IRESTLookupDefinition';
+import { RestLookupFieldValue } from './RestLookupFieldValue';
 
 export interface ISPListFields {
   value: ISPListField[];
 }
 
-export type ChangedFormEvent = (sourceField: ISPListField, newValue: string | string[] | LinkFieldValue | boolean | ChoiceValue | Date, validationError: string) => void;
+export type ChangedFormEvent = (sourceField: ISPListField, newValue: string | string[] | LinkFieldValue | boolean | ChoiceValue | Date | RestLookupFieldValue, validationError: string) => void;
 
 //ISourceID="{9516d5e4-aa12-4931-a5a5-9b5e6c15db91}" Name="Kontakt_x003a_E_x002d_Mail" Version="1" />"
 export type LookupInfo = {
@@ -53,7 +54,7 @@ export interface ISPListField {
   CommaSeparator: boolean;
   Choices: string[];
   TypeAsString: string;
-  FormValue: string | string[] | boolean | ChoiceValue | LinkFieldValue | Date
+  FormValue: string | string[] | boolean | ChoiceValue | LinkFieldValue | Date | RestLookupFieldValue
   IsUsedInForm: boolean;
   IsValid: boolean;
   //ValidationPattern:string;  can be tel, email, url and full regex pattern

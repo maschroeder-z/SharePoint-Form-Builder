@@ -60,6 +60,8 @@ declare interface IDynamicFormularGeneratorWebPartStrings {
   AppTeamsTabEnvironment: string;
   AppOfficeEnvironment: string;
   AppOutlookEnvironment: string;
+
+  MSGDataSendAlready: string;
 }
 
 declare module 'DynamicFormularGeneratorWebPartStrings' {

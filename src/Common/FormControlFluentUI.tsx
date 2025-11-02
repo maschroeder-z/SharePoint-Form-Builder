@@ -1,4 +1,4 @@
-import { Dropdown, Option, Checkbox, Input, Label, Radio, RadioGroup, RadioGroupOnChangeData, Textarea, InputOnChangeData, Field, InfoLabel, ComboboxProps, Combobox } from '@fluentui/react-components';
+import { Dropdown, Option, Checkbox, Input, Label, Radio, RadioGroup, RadioGroupOnChangeData, Textarea, InputOnChangeData, Field, InfoLabel, ComboboxProps, Combobox, OptionOnSelectData, SelectionEvents } from '@fluentui/react-components';
 import * as React from 'react';
 import { FieldTypes } from './FieldTypes';
 import { SPHttpClient } from '@microsoft/sp-http';
@@ -9,6 +9,7 @@ import { LinkFieldValue } from './LinkFieldValue';
 import { DatePicker } from "@fluentui/react-datepicker-compat";
 import { ErrorCircle24Filled, NumberSymbolSquare24Regular, TextNumberFormat24Filled, CurrencyDollarEuro24Filled } from '@fluentui/react-icons';
 import { ChangeEvent } from 'react';
+import { RestLookupFieldValue } from './RestLookupFieldValue';
 
 // https://fettblog.eu/typescript-react/hooks/#useeffect
 // https://hackwild.com/article/event-handling-techniques/
@@ -43,7 +44,7 @@ import { ChangeEvent } from 'react';
 */
 type FormFieldState = {
   errorMessage: string;
-  currentFormValue: LinkFieldValue | string | string[] | boolean | ChoiceValue | Date;
+  currentFormValue: LinkFieldValue | string | string[] | boolean | ChoiceValue | Date | RestLookupFieldValue;
   lookupChoices?: ChoiceValue[];
 }
 
@@ -71,7 +72,7 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
   constructor(fieldData: ISPListField) {
     super(fieldData);
     this.state = {
-      currentFormValue: "",
+      currentFormValue: null,
       errorMessage: ""
     };
     this.onFormdataChanged = this.props.ChangedHandler;
@@ -110,8 +111,8 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
     }
   }
 
-  private manageFormFieldChanges(newValue: string | string[] | boolean | Date, formID: string, sourceElement: HTMLInputElement | HTMLTextAreaElement): void {
-    let fieldValueToSet: string | string[] | LinkFieldValue | boolean | ChoiceValue | Date = newValue;
+  private manageFormFieldChanges(newValue: LinkFieldValue | string | string[] | boolean | ChoiceValue | Date | RestLookupFieldValue, formID: string, sourceElement: HTMLInputElement | HTMLTextAreaElement): void {
+    let fieldValueToSet: string | string[] | LinkFieldValue | boolean | ChoiceValue | Date | RestLookupFieldValue = newValue;
     let rawNewValue: string = fieldValueToSet.toString();
     if (this.props.FieldTypeKind === FieldTypes.URLORIMAGE) {
       if (formID.indexOf("Alternate") !== -1) {
@@ -225,7 +226,6 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
     );
   }
 
-  //onChange={this._onChangeHandler} 
   private renderFormControl(): React.ReactElement<ISPListField> {
     if (this.props.FieldTypeKind === FieldTypes.CHOICE || this.props.FieldTypeKind === FieldTypes.MULTICHOICE) {
       if (typeof this.props.Choices !== "undefined" && this.props.Choices.length > 0) {
@@ -347,7 +347,7 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
       if (Math.abs(this.props.MinimumValue) !== Number.MAX_VALUE)
         placeHolder = `Min. Wert ${this.props.MinimumValue}`;
       if (this.props.MaximumValue !== Number.MAX_VALUE)
-        placeHolder = `${placeHolder.length > 0 ? placeHolder + " bis max. " : "Max. Wert: "} ${this.props.MaximumValue}`;
+        placeHolder = `${placeHolder.length > 0 ? placeHolder + " bis max. " : "Max. Wert: "} ${this.props.MaximumValue}`; // TODO i18n
       return (<div>
         <Input name={this.props.InternalName} id={this.props.InternalName}
           onBlur={this._onBlurHandler}
@@ -359,24 +359,17 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
       </div>);
     }
     // REST endpoints
-    const onOptionSelect: ComboboxProps['onOptionSelect'] = (e, data) => {
-      this.setState({
-        currentFormValue: data.optionText ?? ''
-      });
+    const onOptionSelect: ComboboxProps['onOptionSelect'] = (e: SelectionEvents, data: OptionOnSelectData) => {
+      this.manageFormFieldChanges({ Display: data.optionText, Value: data.optionValue } as RestLookupFieldValue, this.props.InternalName, null);
     };
-    console.log(this.props.RESTLookup);
     if (typeof this.props.RESTLookup !== "undefined" && this.props.RESTLookup !== null) {
       return (<div>
         <Combobox
-          inlinePopup={true}
-          value={this.state.currentFormValue as string}
+          value={(this.state.currentFormValue !== null ? (this.state.currentFormValue as RestLookupFieldValue).Display : "")}
           id={this.props.InternalName}
           onOptionSelect={onOptionSelect}
           onChange={async (ev: React.ChangeEvent<HTMLInputElement>) => {
             if (ev.target.value.length > 0) {
-              this.setState({
-                currentFormValue: ev.target.value ?? ''
-              });
               const response = await fetch(this.props.RESTLookup.RestEndpointUrl.replace("@@VALUE@@", ev.target.value));
               const body = await response.json();
               const mapped = body[this.props.RESTLookup.CollectionPropertyName].map((n: any) => {
@@ -388,20 +381,20 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
             }
             else {
               this.setState({
-                currentFormValue: ev.target.value ?? ''
+                currentFormValue: { Display: ev.target.value, Value: ev.target.value } as RestLookupFieldValue
               });
+              this.manageFormFieldChanges(ev.target.value, this.props.InternalName, null);
             }
           }}
         >
           {this.state.lookupChoices && this.state.lookupChoices.map((element: ChoiceValue) => (
-            <Option key={element.Value}>
+            <Option key={element.Value} value={element.Value}>
               {element.Title}
             </Option>
           ))}
         </Combobox>
       </div>);
     }
-
     return (<div>
       <Input name={this.props.InternalName} id={this.props.InternalName}
         defaultValue={this.props.DefaultValue}

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ChangedFormEvent, ChoiceValue, ISPListField } from "./ISPListFields";
 import { LinkFieldValue } from './LinkFieldValue';
+import { RestLookupFieldValue } from './RestLookupFieldValue';
 /**
  * TODO
  * PREVENT LOADING: https://de.reactjs.org/docs/react-component.html#shouldcomponentupdate
@@ -29,7 +30,7 @@ import { LinkFieldValue } from './LinkFieldValue';
 */
 type FormFieldState = {
     errorMessage: string;
-    currentFormValue: LinkFieldValue | string | string[] | boolean | ChoiceValue | Date;
+    currentFormValue: LinkFieldValue | string | string[] | boolean | ChoiceValue | Date | RestLookupFieldValue;
     lookupChoices?: ChoiceValue[];
 };
 export declare class FormControlFluentUI extends React.Component<ISPListField, FormFieldState> {

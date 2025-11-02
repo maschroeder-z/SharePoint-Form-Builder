@@ -13,6 +13,7 @@ import { ISPFormLists } from '../../../Common/ISPFormLists';
 import * as strings from 'DynamicFormularGeneratorWebPartStrings';
 import { FlashSettings24Regular } from '@fluentui/react-icons';
 import { LinkFieldValue } from '../../../Common/LinkFieldValue';
+import { RestLookupFieldValue } from '../../../Common/RestLookupFieldValue';
 
 type FormState = {
   errorMessage: string[];
@@ -191,6 +192,7 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
                 const fieldInfo: ISPListField = this.availableFields.value.filter(f => f.StaticName === fieldStaticName)[0];
                 fieldInfo.FormValue = value;
                 fieldInfo.IsValid = validationError.length === 0;
+                //fieldInfo.RestLookupKeyValue = lookupKeyValue;                
                 this.ValidateCompleteForm();
                 //console.log(this.availableFields.value.filter(f=>f.IsUsedInForm));
               },
@@ -254,10 +256,23 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
     const fieldToSave: DynamicFormatData = {};
     this.availableFields.value.filter(f => f.IsUsedInForm && typeof f.FormValue !== "undefined" && f.FormValue !== "").forEach((formEntry, index) => {
 
-      if (formEntry.FieldTypeKind === FieldTypes.LOOKUP)
+      if (formEntry.FieldTypeKind === FieldTypes.LOOKUP) {
         fieldToSave[formEntry.InternalName + "Id"] = (formEntry.FormValue as ChoiceValue).Value;
+      }
       else
         fieldToSave[formEntry.InternalName] = formEntry.FormValue;
+
+      if (formEntry.RESTLookup !== undefined && formEntry.RESTLookup !== null) {
+        const lookupValue: RestLookupFieldValue = formEntry.FormValue as RestLookupFieldValue;
+
+        fieldToSave[formEntry.InternalName] = lookupValue.Display;
+
+        const fieldName: string = formEntry.InternalName + "Value";
+        const lookupValueField = this.availableFields.value.filter(f => f.InternalName === fieldName)[0];
+        if (lookupValueField !== undefined && lookupValueField !== null) {
+          fieldToSave[fieldName] = lookupValue.Value;
+        }
+      }
 
       // override specific
       /*if (formEntry.FieldTypeKind === FieldTypes.BOOLEAN) {
@@ -442,7 +457,7 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
       //ref={(el) => this.mainForm = el}
       return (
         <form className={`${styles.dynamicFormularGenerator}`}>
-          {this.state.isAlreadySent && <h3>Folgende Daten haben Sie erfolgreich versendet:</h3>}
+          {this.state.isAlreadySent && <h3>{strings.MSGDataSendAlready}</h3>}
           {this.props.description.length > 0 && <p>{this.props.description}</p>}
           {this.state && this.state.formFields && this.state.formFields.map((val) => {
             return this.formComponentFactory(val);
