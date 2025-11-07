@@ -191,9 +191,7 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
                 const fieldInfo: ISPListField = this.availableFields.value.filter(f => f.StaticName === fieldStaticName)[0];
                 fieldInfo.FormValue = value;
                 fieldInfo.IsValid = validationError.length === 0;
-                //fieldInfo.RestLookupKeyValue = lookupKeyValue;                
                 this.ValidateCompleteForm();
-                //console.log(this.availableFields.value.filter(f=>f.IsUsedInForm));
               },
               key: fieldInfo.StaticName
             }
@@ -293,12 +291,11 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
         fieldToSave[formEntry.InternalName] = formEntry.FormValue;
       }
       if (formEntry.FieldTypeKind === FieldTypes.DATETIME) {
-        fieldToSave[formEntry.InternalName] = (formEntry.FormValue as Date).toISOString();
-        /*const result : Date = Helper.parseDateTime(formEntry.FormValue.toString());
-        if (result!==null)
-        {
-          fieldToSave[formEntry.InternalName]=result.toISOString();
-        }*/
+        try {
+          fieldToSave[formEntry.InternalName] = (formEntry.FormValue as Date).toISOString();
+        } catch (error) {
+          console.error(error);
+        }
       }
     });
     // Datetime: http://blog.plataformatec.com.br/2014/11/how-to-serialize-date-and-datetime-without-losing-information/
@@ -325,7 +322,7 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
         this.sendConfirmationMail(item);
         this.setState({ isProcessing: false, isAlreadySent: true, isFormValid: false });
         await this.uploadAttachments(item);
-        alert(typeof this.props.successMessage !== "undefined" ? this.props.successMessage : "Vielen Dank. Die Daten wurden versendet.");
+        alert(typeof this.props.successMessage !== "undefined" ? this.props.successMessage : strings.MSGConfirmationSubmitData);
       });
   }
 
@@ -341,7 +338,7 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
       const body: string = `<p><strong>${this.props.emailLeadText}</strong></p><table>` + this.availableFields.value.filter(f => f.IsUsedInForm && typeof f.FormValue !== "undefined").map(entry => {
         return `<tr><td>${entry.Title}</td><td><strong>${Helper.GetFieldValueAsString(entry)}</strong></td></tr>`;
       }).join("") + "</table>" + editLink;
-      Helper.sendEMail(this.props.currentUserEMail, this.props.emailSubject, body, this.props.siteURL, this.props.httpClient);
+      Helper.sendEMail(this.props.currentUserEMail, this.props.emailSubject, body, this.props.siteURL, this.props.wpContext);
     }
   }
 

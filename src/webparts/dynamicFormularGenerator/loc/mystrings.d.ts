@@ -77,6 +77,7 @@ declare interface IDynamicFormularGeneratorWebPartStrings {
   LBLFormMinValue: string;
   LBLFormMaxValue: string;
   LBLFormMaxMinValue: string;
+  MSGConfirmationSubmitData: string;
 }
 
 declare module 'DynamicFormularGeneratorWebPartStrings' {

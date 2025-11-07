@@ -73,6 +73,7 @@ define([], function () {
     "LBLRestLookupDescription": "Configure remote lookups",
     "LBLFormMinValue": "Minimum value",
     "LBLFormMaxValue": "Maximum value",
-    "LBLFormMaxMinValue": "till max."
+    "LBLFormMaxMinValue": "till max.",
+    "MSGConfirmationSubmitData": "Your data has been successfully submitted. Thank you!"
   }
 });

@@ -8,6 +8,12 @@
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
     "iconPath": "assets/96x96.png",
+    "webApiPermissionRequests": [
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Mail.Send"
+      }
+    ],
     "developer": {
       "name": "Marc Andre Schröder-Zhou",
       "websiteUrl": "https://www.dev-sky.net",
@@ -15,7 +21,10 @@
       "termsOfUseUrl": "https://go.microsoft.com/fwlink/?linkid=2041178",
       "mpnId": "########"
     },
-    "supportedLocales": ["de-DE", "en-US"] ,
+    "supportedLocales": [
+      "de-DE",
+      "en-US"
+    ],
     "metadata": {
       "shortDescription": {
         "default": "dev-sky.net .::. Dynamic Forms App for SharePoint Online"
