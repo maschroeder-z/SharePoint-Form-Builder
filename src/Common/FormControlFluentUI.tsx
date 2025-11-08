@@ -375,7 +375,7 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
               const response = await fetch(this.props.RESTLookup.RestEndpointUrl.replace("@@VALUE@@", ev.target.value));
               const body = await response.json();
               const mapped = body[this.props.RESTLookup.CollectionPropertyName].map((n: any) => {
-                return { Title: n.LastName + ", " + n.FirstName, Value: n[this.props.RESTLookup.IDPropertyName] } as ChoiceValue;
+                return { Title: n[this.props.RESTLookup.DisplayPropertyName], Value: n[this.props.RESTLookup.IDPropertyName] } as ChoiceValue;
               });
               this.setState({
                 lookupChoices: mapped
