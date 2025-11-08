@@ -14,6 +14,12 @@ https://storybooks.fluentui.dev/react/?path=/docs/concepts-introduction--docs
 https://fluent2.microsoft.design/get-started/whatisnew
 https://storybooks.fluentui.dev/react/iframe.html?viewMode=docs&id=components-combobox--docs
 
+Mailing:
+https://learn.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0&tabs=javascript
+https://learn.microsoft.com/en-us/graph/api/resources/itembody?view=graph-rest-1.0
+https://learn.microsoft.com/en-us/graph/outlook-create-send-messages#reading-messages-with-control-over-the-body-format-returned
+
+
 # Upgrade project dev-sky Dynamic Form App to v1.21.1
 
 Date: 18.9.2025

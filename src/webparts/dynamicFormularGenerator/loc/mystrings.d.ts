@@ -1,6 +1,7 @@
 declare interface IDynamicFormularGeneratorWebPartStrings {
   PropertyPaneDescription: string;
   GroupListViewData: string;
+  GroupEMailSettings: string;
   DataListSourceLabel: string;
   DataListSourceCurrentLabel: string;
   DataListSourceExternLabel: string;
@@ -23,6 +24,7 @@ declare interface IDynamicFormularGeneratorWebPartStrings {
   AttachmentLabel: string;
   AttachmentIndexLabel: string;
   EnablePrintLabel: string;
+  EmailNotifyBCCLabel: string;
 
   GroupMiscSettings: string;
   DateTimeFieldLabel: string;
@@ -78,6 +80,7 @@ declare interface IDynamicFormularGeneratorWebPartStrings {
   LBLFormMaxValue: string;
   LBLFormMaxMinValue: string;
   MSGConfirmationSubmitData: string;
+  ErrorInvalidFileType: string;
 }
 
 declare module 'DynamicFormularGeneratorWebPartStrings' {

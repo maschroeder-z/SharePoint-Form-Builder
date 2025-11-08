@@ -31,4 +31,5 @@ export interface IDynamicFormularGeneratorProps {
   msgFormNotPublished: string;
   msgFormExpired: string;
   contentTypeID: string;
+  emailNotifyBCC: string;
 }

@@ -32,12 +32,12 @@ export class Helper {
     // https://learn.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0&tabs=javascript
     // https://learn.microsoft.com/en-us/graph/api/message-send?view=graph-rest-1.0&tabs=http
     // https://learn.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/get-started/using-microsoft-graph-apis
-    static async sendEMail(receiver: string, subject: string, body: string, siteUrl: string, wpCtx: WebPartContext): Promise<void> {
+    static async sendEMail(receiver: string, bccReceiver: string, subject: string, body: string, siteUrl: string, wpCtx: WebPartContext): Promise<void> {
         const sendMail = {
             message: {
                 subject: subject,
                 body: {
-                    contentType: 'Text',
+                    contentType: 'html',
                     content: body
                 },
                 toRecipients: [
@@ -46,13 +46,20 @@ export class Helper {
                             address: receiver
                         }
                     }
-                ]
+                ],
+                ccRecipients: (typeof bccReceiver !== "undefined" && bccReceiver !== null && bccReceiver.length > 0) ? [
+                    {
+                        emailAddress: {
+                            address: bccReceiver
+                        }
+                    }
+                ] : []
             },
             saveToSentItems: 'false'
         };
 
         const graphCtx = await wpCtx.msGraphClientFactory.getClient('3');
-        await graphCtx.api('/me/sendMail').post(sendMail)
+        await graphCtx.api(`/users/${wpCtx.pageContext.user.loginName}/sendMail`).post(sendMail)
     }
 
     // see: https://support.microsoft.com/en-us/office/retirement-of-the-sharepoint-sendemail-api-b35bbab1-7d09-455f-8737-c2de63fe0821

@@ -32,5 +32,6 @@ export interface IDynamicFormularGeneratorProps {
     msgFormNotPublished: string;
     msgFormExpired: string;
     contentTypeID: string;
+    emailNotifyBCC: string;
 }
 //# sourceMappingURL=IDynamicFormularGeneratorProps.d.ts.map

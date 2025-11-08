@@ -40,6 +40,7 @@ export interface IDynamicFormularGeneratorWebPartProps {
     msgFormNotPublished: string;
     msgFormExpired: string;
     contentTypeID: string;
+    emailNotifyBCC: string;
 }
 export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPart<IDynamicFormularGeneratorWebPartProps> {
     private _isDarkTheme;
@@ -65,6 +66,7 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
     protected get getSourceConfiguration(): IPropertyPaneGroup;
     protected get getMiscConfiguration(): IPropertyPaneGroup;
     protected onPropertyPaneConfigurationStart(): void;
+    protected getEMailConfiguration(): IPropertyPaneGroup;
     protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration;
 }
 //# sourceMappingURL=DynamicFormularGeneratorWebPart.d.ts.map

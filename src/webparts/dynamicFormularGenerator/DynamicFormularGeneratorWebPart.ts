@@ -54,6 +54,7 @@ export interface IDynamicFormularGeneratorWebPartProps {
   msgFormNotPublished: string,
   msgFormExpired: string,
   contentTypeID: string;
+  emailNotifyBCC: string;
 }
 
 export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPart<IDynamicFormularGeneratorWebPartProps> {
@@ -97,7 +98,8 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
         validTo: this.properties.validTo,
         msgFormNotPublished: this.properties.msgFormNotPublished,
         msgFormExpired: this.properties.msgFormExpired,
-        contentTypeID: this.properties.contentTypeID
+        contentTypeID: this.properties.contentTypeID,
+        emailNotifyBCC: this.properties.emailNotifyBCC
       }
     );
 
@@ -462,6 +464,42 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
     this.loadWPConfigInformation();
   }
 
+  protected getEMailConfiguration(): IPropertyPaneGroup {
+    const grp: IPropertyPaneGroup = {
+      groupName: strings.GroupEMailSettings,
+      groupFields: [
+        PropertyPaneToggle('emailToUser', {
+          label: strings.SendEMailWithFormDataLabel,
+          onText: strings.SendEMailWithFormDataYesLabel,
+          offText: strings.SendEMailWithFormDataNoLabel,
+          checked: false
+        }),
+        PropertyPaneTextField('emailSubject', {
+          label: strings.EmailSubjectLable,
+          disabled: !this.properties.emailToUser,
+          multiline: false
+        }),
+        PropertyPaneTextField('emailHeader', {
+          label: strings.EmailHeaderLabel,
+          disabled: !this.properties.emailToUser,
+          multiline: true,
+          resizable: true
+        }),
+        PropertyPaneCheckbox('addDataLinkInEMail', {
+          text: strings.AddDataLinkToEMailLabel,
+          disabled: !this.properties.emailToUser
+        }),
+        PropertyPaneTextField('emailNotifyBCC', {
+          label: strings.EmailNotifyBCCLabel,
+          disabled: !this.properties.emailToUser,
+          multiline: false
+        }),
+      ]
+    };
+    return grp;
+  }
+
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -488,27 +526,6 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
                 PropertyPaneCheckbox('enablePrint', {
                   text: strings.EnablePrintLabel
                 }),
-                PropertyPaneToggle('emailToUser', {
-                  label: strings.SendEMailWithFormDataLabel,
-                  onText: strings.SendEMailWithFormDataYesLabel,
-                  offText: strings.SendEMailWithFormDataNoLabel,
-                  checked: false
-                }),
-                PropertyPaneTextField('emailSubject', {
-                  label: strings.EmailSubjectLable,
-                  disabled: !this.properties.emailToUser,
-                  multiline: false
-                }),
-                PropertyPaneTextField('emailHeader', {
-                  label: strings.EmailHeaderLabel,
-                  disabled: !this.properties.emailToUser,
-                  multiline: true,
-                  resizable: true
-                }),
-                PropertyPaneCheckbox('addDataLinkInEMail', {
-                  text: strings.AddDataLinkToEMailLabel,
-                  disabled: !this.properties.emailToUser
-                }),
                 PropertyPaneTextField('allowedUploadFileTypes', {
                   label: strings.AllowedUploadFileTypesLabel,
                   multiline: false
@@ -523,10 +540,10 @@ export default class DynamicFormularGeneratorWebPart extends BaseClientSideWebPa
                 })
               ]
             },
+            this.getEMailConfiguration(),
             this.getMiscConfiguration
           ]
         },
-
       ]
     };
   }

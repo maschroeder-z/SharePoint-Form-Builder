@@ -24,6 +24,7 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
     private getFieldMetaData;
     private formComponentFactory;
     private handleAttachment;
+    private ValidateFileInput;
     private ValidateCompleteForm;
     private getFileBuffer;
     saveFormData: () => void;

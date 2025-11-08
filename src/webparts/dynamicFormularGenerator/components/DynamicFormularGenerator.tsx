@@ -203,23 +203,28 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
     return (<p>ERROR</p>);
   }
 
-  private handleAttachment = (eventData: React.ChangeEvent<HTMLInputElement>): void => { // async Promise<void>    
-    // event processing
+  private handleAttachment = (eventData: React.ChangeEvent<HTMLInputElement>): void => {
     const fileInfo: File = eventData.target.files[0];
-    this.uploadFileList[eventData.target.id] = fileInfo;
-    this.ValidateCompleteForm();
-    //const result : ArrayBuffer|string = await this.getFileBuffer(eventData.target.files[0]);      
+    if (this.ValidateFileInput(fileInfo)) {
+      alert(strings.ErrorInvalidFileType.replace("@FileType", this.props.allowedUploadFileTypes));
+      eventData.target.value = "";
+    }
+    else {
+      this.uploadFileList[eventData.target.id] = fileInfo;
+    }
+  }
+
+  private ValidateFileInput(fileInfo: File): boolean {
+    const parts: string[] = fileInfo.name.split(".");
+    const extension = parts[parts.length - 1];
+    return (this.props.allowedUploadFileTypes.indexOf(extension) === -1);
   }
 
   private ValidateCompleteForm(): void {
     if (typeof this.props.allowedUploadFileTypes !== "undefined" && this.props.allowedUploadFileTypes.length > 0) {
       let key: keyof { [key: string]: File };
       for (key in this.uploadFileList) {
-        const fileInfo: File = this.uploadFileList[key];
-        const parts: string[] = fileInfo.name.split(".");
-        const extension = parts[parts.length - 1];
-        if (this.props.allowedUploadFileTypes.indexOf(extension) === -1) {
-          // ERROR
+        if (this.ValidateFileInput(this.uploadFileList[key])) {
           this.setState({ isFormValid: false });
           return;
         }
@@ -229,7 +234,6 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
       isFormValid: this.availableFields.value.filter(f => f.IsUsedInForm && !f.IsValid).length === 0
     });
   }
-
 
   //https://medium.com/@ian.mundy/async-event-handlers-in-react-a1590ed24399
   private getFileBuffer(file: File): Promise<ArrayBuffer | string> {
@@ -330,15 +334,15 @@ export default class DynamicFormularGenerator extends React.Component<IDynamicFo
     if (this.props.sendConfirmationEMail) {
       const listFormInfo = await this.props.httpClient.get(`${this.props.siteURL}/_api/web/lists/getbyid('${this.props.listID}')/Forms?$select=ServerRelativeUrl`, SPHttpClient.configurations.v1);
       const resultInfo: ISPFormLists = await listFormInfo.json();
-      const displayFormInfo = resultInfo.value.filter(x => x.ServerRelativeUrl.indexOf('Dis') !== -1);
+      const displayFormInfo = resultInfo.value.filter(x => x.ServerRelativeUrl.indexOf('DispForm') !== -1);
       let editLink = "";
       if (this.props.addDataLinkInEMail && displayFormInfo.length > 0) {
-        editLink = `<br /><br /><a href="${this.props.siteURL}/${displayFormInfo[0].ServerRelativeUrl}?ID=${item.Id}">${strings.MAILLinkTodata}</a><br />`;
+        editLink = `<br /><br /><a href="${window.location.origin}/${displayFormInfo[0].ServerRelativeUrl}?ID=${item.Id}">${strings.MAILLinkTodata}</a><br />`;
       }
       const body: string = `<p><strong>${this.props.emailLeadText}</strong></p><table>` + this.availableFields.value.filter(f => f.IsUsedInForm && typeof f.FormValue !== "undefined").map(entry => {
         return `<tr><td>${entry.Title}</td><td><strong>${Helper.GetFieldValueAsString(entry)}</strong></td></tr>`;
       }).join("") + "</table>" + editLink;
-      Helper.sendEMail(this.props.currentUserEMail, this.props.emailSubject, body, this.props.siteURL, this.props.wpContext);
+      Helper.sendEMail(this.props.currentUserEMail, this.props.emailNotifyBCC, this.props.emailSubject, body, this.props.siteURL, this.props.wpContext);
     }
   }
 
