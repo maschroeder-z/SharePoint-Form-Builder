@@ -7,7 +7,7 @@ This allows the form to be flexibly integrated into all SharePoint pages. The we
 *UI of the generated form*
 
 ## Video
-[![SharePoint Online: Dynamisches Formular aus Listenansicht](https://img.youtube.com/vi/p3RwLIM0Efc/hqdefault.jpg)](https://youtu.be/p3RwLIM0Efc)
+[![Presentation at the Community call (13.11.2025)](https://img.youtube.com/vi/gf2wctHXDLc/hqdefault.jpg)](https://youtu.be/gf2wctHXDLc?si=eJhJ5jhap8k1aKBM&t=1002)
 
 ## Used SharePoint Framework Version
 ![version](https://img.shields.io/badge/version-1.21.1-green.svg)

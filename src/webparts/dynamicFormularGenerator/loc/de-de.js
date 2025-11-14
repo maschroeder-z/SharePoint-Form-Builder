@@ -79,6 +79,8 @@ define([], function () {
 
     "GroupEMailSettings": "E-Mail Einstellungen",
     "EmailNotifyBCCLabel": "BCC E-Mail Adresse",
-    "ErrorInvalidFileType": "Der ausgewählte Dateityp ist nicht erlaubt. Erlaubte Dateitypen: @FileType"
+    "ErrorInvalidFileType": "Der ausgewählte Dateityp ist nicht erlaubt. Erlaubte Dateitypen: @FileType",
+    "LblPchEnterUrl": "URL hier eingeben",
+    "LblPchEnterAlternateText": "alternativen Text hier eingeben"
   }
 });

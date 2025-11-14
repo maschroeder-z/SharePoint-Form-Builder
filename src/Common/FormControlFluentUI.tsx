@@ -115,16 +115,17 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
   private manageFormFieldChanges(newValue: LinkFieldValue | string | string[] | boolean | ChoiceValue | Date | RestLookupFieldValue, formID: string, sourceElement: HTMLInputElement | HTMLTextAreaElement): void {
     let fieldValueToSet: string | string[] | LinkFieldValue | boolean | ChoiceValue | Date | RestLookupFieldValue = newValue;
     let rawNewValue: string = fieldValueToSet.toString();
+    console.log(this.state.currentFormValue);
     if (this.props.FieldTypeKind === FieldTypes.URLORIMAGE) {
       if (formID.indexOf("Alternate") !== -1) {
-        const linkValue = this.state.currentFormValue === "" ? "" : (this.state.currentFormValue as LinkFieldValue).Url;
+        const linkValue = this.state.currentFormValue === null || this.state.currentFormValue === "" ? "" : (this.state.currentFormValue as LinkFieldValue).Url;
         fieldValueToSet = {
           Url: linkValue,
           Description: newValue as string
         }
       }
       else {
-        const labelValue = this.state.currentFormValue === "" ? "" : (this.state.currentFormValue as LinkFieldValue).Description;
+        const labelValue = this.state.currentFormValue === null || this.state.currentFormValue === "" ? "" : (this.state.currentFormValue as LinkFieldValue).Description;
         fieldValueToSet = {
           Url: newValue as string,
           Description: labelValue
@@ -310,19 +311,21 @@ export class FormControlFluentUI extends React.Component<ISPListField, FormField
             <div>
               <Input name={this.props.InternalName}
                 id={this.props.InternalName}
-                placeholder='URL eingeben'
+                placeholder={strings.LblPchEnterUrl}
                 type="url"
                 className={styles.textInput}
                 disabled={this.props.ReadOnlyField || this.props.IsDisabled}
                 onBlur={this._onBlurHandler} />
             </div>
             <div>
-              <Label size={this.UI_LABELSIZE} htmlFor={`${this.props.InternalName}Alternate`} required={false}>Link Text</Label>
+              <Label size={this.UI_LABELSIZE} htmlFor={`${this.props.InternalName}Alternate`} required={false}>
+                {strings.LblPchEnterAlternateText}
+              </Label>
               <Input name={this.props.InternalName + 'Alternate'}
                 id={this.props.InternalName + 'Alternate'}
                 type="text"
                 className={styles.textInput}
-                placeholder='alternativen Text'
+                placeholder={strings.LblPchEnterAlternateText}
                 disabled={this.props.ReadOnlyField || this.props.IsDisabled}
                 onBlur={this._onBlurHandler} />
             </div>

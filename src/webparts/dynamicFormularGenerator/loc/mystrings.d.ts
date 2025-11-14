@@ -81,6 +81,9 @@ declare interface IDynamicFormularGeneratorWebPartStrings {
   LBLFormMaxMinValue: string;
   MSGConfirmationSubmitData: string;
   ErrorInvalidFileType: string;
+
+  LblPchEnterUrl: string;
+  LblPchEnterAlternateText: string;
 }
 
 declare module 'DynamicFormularGeneratorWebPartStrings' {

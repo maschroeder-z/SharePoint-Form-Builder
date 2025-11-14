@@ -77,6 +77,8 @@ define([], function () {
     "MSGConfirmationSubmitData": "Your data has been successfully submitted. Thank you!",
     "GroupEMailSettings": "E-Mail Settings",
     "EmailNotifyBCCLabel": "BCC E-Mail address",
-    "ErrorInvalidFileType": "The selected file type is not allowed. Allowed file types: @FileType"
+    "ErrorInvalidFileType": "The selected file type is not allowed. Allowed file types: @FileType",
+    "LblPchEnterUrl": "Enter URL here",
+    "LblPchEnterAlternateText": "Enter alternate text here"
   }
 });
