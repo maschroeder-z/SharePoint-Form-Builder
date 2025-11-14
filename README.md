@@ -3,8 +3,12 @@
 This WebPart (App) builds and creates an input form from a given SharePoint List and defined view. The view is used to determine the fields and the order of the fields in the form.
 This allows the form to be flexibly integrated into all SharePoint pages. The web part uses the latest version of the [Fluent UI React Components library](https://react.fluentui.dev/?path=/docs/concepts-introduction--page).
 
-![UI of the generated form](https://www.dev-sky.net/img/apps/formapp01.png)
-*UI of the generated form*
+![UI of the generated form](/assets/form-builder-screen-01.png)
+*UI of the generated form (1)*
+
+![UI of the generated form](/assets/form-builder-screen-02.png)
+*UI of the generated form (2)*
+
 
 ## Video
 [![Presentation at the Community call (13.11.2025)](https://img.youtube.com/vi/gf2wctHXDLc/hqdefault.jpg)](https://youtu.be/gf2wctHXDLc?si=eJhJ5jhap8k1aKBM&t=1002)
